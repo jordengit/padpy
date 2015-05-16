@@ -13,22 +13,34 @@ legwork.
 
 It gets the json from the API and saves it to your drive. Writing the wrappers.
 
+## Features
+
+* Thin wrappers around:
+  * Monsters
+  * ActiveSkills
+  * Awakenings
+  * Evolutions
+  * LeaderSkills
+
+* Getting monsters
+  * ...by id
+  * ...in a given monsters evolution tree
+
+* Getting a given monster's
+  * Exp to level up
+  * Feed exp at a given level
+
 ## Goals
 
 * Wrap the following so they're not plain dicts
-  * ActiveSkills
-  * Awakenings
   * Events
-  * Evolutions
   * Food
   * LeaderSkills
-  * Materials
-  * Monsters
 
 * Query on monsters
-  * Get by id
-  * Get all monsters in the evolution chain
   * filter by whatever
 
-* Figure out the feed xp you get
+* Determine optimum feed path
+* Dream goal: Monster Box Image parsing, so you can quickly import your monster
+  list
 
