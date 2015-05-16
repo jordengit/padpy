@@ -11,9 +11,4 @@ if __name__ == "__main__":
     m1e = pad.evolutions.get_by_id(m1.id)
     m1a = pad.active_skills.get_by_id(m1.active_skill)
     # print m1e
-    import ipdb; ipdb.set_trace()
 
-
-
-
-raw_input("Are you done here?\n> ")
