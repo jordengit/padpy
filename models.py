@@ -4,12 +4,28 @@ from dataset import get_all_raw_data
 
 ElementTypes = Enum("ElementTypes", "Fire Water Wood Dark Light NoElement")
 ElementIds = {
-    0:ElementTypes.Fire,
-    1:ElementTypes.Water,
-    2:ElementTypes.Wood,
-    3:ElementTypes.Dark,
-    4:ElementTypes.Light,
-    None:ElementTypes.NoElement,
+    0 : ElementTypes.Fire,
+    1 : ElementTypes.Water,
+    2 : ElementTypes.Wood,
+    3 : ElementTypes.Dark,
+    4 : ElementTypes.Light,
+    None : ElementTypes.NoElement,
+}
+
+TypeTypes = Enum("TypeTypes", "EvoMaterial Balanced Physical Healer Dragon God Attacker Devil AwokenSkillMaterial Protected EnhanceMaterial NoType")
+TypeIds = { 
+    0 : TypeTypes.EvoMaterial,
+    1 : TypeTypes.Balanced,
+    2 : TypeTypes.Physical,
+    3 : TypeTypes.Healer,
+    4 : TypeTypes.Dragon,
+    5 : TypeTypes.God,
+    6 : TypeTypes.Attacker,
+    7 : TypeTypes.Devil,
+    12 : TypeTypes.AwokenSkillMaterial,
+    13 : TypeTypes.Protected,
+    14 : TypeTypes.EnhanceMaterial,
+    None : TypeTypes.NoType,
 }
 
 
@@ -137,6 +153,25 @@ class Element(object):
             str(self)
         )
 
+class Type(object):
+    def __init__(self, id):
+        self.id = id
+
+    @property
+    def long_name(self):
+        return TypeIds[self.id].name
+
+    def __str__(self):
+        return "Type {}".format(
+            self.long_name,
+        )
+
+    def __repr__(self):
+        return "<{}>".format(
+            str(self)
+        )
+
+
 class Attribute(object):
     def __init__(self, max, min, scale, owner):
         self.max = max
@@ -183,9 +218,14 @@ class Monster(object):
         self.leader_skill = kwargs['leader_skill']
 
         self.element = Element(kwargs['element'])
+        self.element_id = kwargs['element']
         self.element2 = Element(kwargs['element2'])
-        self.type = kwargs['type']
-        self.type2 = kwargs['type2']
+        self.element2_id = kwargs['element2']
+
+        self.type = Type(kwargs['type'])
+        self.type2 = Type(kwargs['type2'])
+        self.type_id = kwargs['type']
+        self.type2_id = kwargs['type2']
 
 
         self.hp = Attribute(
