@@ -17,6 +17,8 @@ class Pad(object):
         return monster
 
 class BaseManager(object):
+    identifier = "id"
+
     def __init__(self, data):
         self.load_data(data)
 
@@ -34,7 +36,7 @@ class BaseManager(object):
             self.objects.append(obj)
 
     def get_by_id(self, id):
-        objects =  filter(lambda obj: int(obj.id) == int(id), self.objects)
+        objects =  filter(lambda obj: getattr(obj, self.identifier) == id, self.objects)
         if objects:
             assert(len(objects)==1)# there should only be 1 object with this id
             return objects[0] 
@@ -46,32 +48,20 @@ class MonsterManager(BaseManager):
     def model(self):
         return Monster
 
-class ActiveSkillManager(object):
-    def __init__(self, active_skills):
-        self.load_data(active_skills)
+class ActiveSkillManager(BaseManager):
+    identifier = "name"
 
-    def load_data(self, active_skills):
-        self.active_skills = []
-        for skill in active_skills:
-            try:
-                mon_obj = ActiveSkill(
+    @property
+    def model(self):
+        return ActiveSkill
+
+    def build_obj(self, **skill):
+        return  self.model(
                     skill['min_cooldown'],
                     skill['effect'],
                     skill['max_cooldown'],
                     skill['name'],
                 )
-                self.active_skills.append(mon_obj)
-            except Exception as e:
-                print e
-                print skill
-
-    def get_by_id(self, name):
-        active_skills =  filter(lambda skill: skill.name == name, self.active_skills)
-        if active_skills:
-            assert(len(active_skills)==1)# there should only be 1 activity with this id
-            return active_skills[0] 
-        else:
-            return None
 
 class ActiveSkill(object):
     def __init__(self, min_cooldown, effect, max_cooldown, name):
@@ -87,7 +77,6 @@ class ActiveSkill(object):
 
     def __repr__(self):
         return str(self)
-
 
 
 class Image(object):
