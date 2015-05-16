@@ -58,7 +58,7 @@ def get_from_api(api_type):
 
     return j
 
-def get_from_cache(api_type):
+def get_from_cache(api_type, verbose=False):
     pathstr = "{base}/{path}.json".format(
         base=DATA_PATH,
         path=ApiTypeMap[api_type]
@@ -66,25 +66,25 @@ def get_from_cache(api_type):
 
     if not os.path.exists(pathstr): 
         create_data_path()
-        print 'fetching', api_type
+        if verbose: print 'fetching', api_type
         val = get_from_api(api_type)
         with open(pathstr, 'w') as f:
             json.dump(val, f)
     else:
-        print 'using cached', api_type
+        if verbose: print 'using cached', api_type
         with open(pathstr) as f:
             val = json.load(f)
 
     return val
 
-def get_all_raw_data():
+def get_all_raw_data(verbose=False):
     return dict(
-        active_skills = get_from_cache(ApiTypes.ActiveSkills),
-        awakenings = get_from_cache(ApiTypes.Awakenings),
-        events = get_from_cache(ApiTypes.Events),
-        evolutions = get_from_cache(ApiTypes.Evolutions),
-        food = get_from_cache(ApiTypes.Food),
-        leader_skills = get_from_cache(ApiTypes.LeaderSkills),
-        materials = get_from_cache(ApiTypes.Materials),
-        monsters = get_from_cache(ApiTypes.Monsters),
+        active_skills = get_from_cache(ApiTypes.ActiveSkills, verbose=verbose),
+        awakenings = get_from_cache(ApiTypes.Awakenings, verbose=verbose),
+        events = get_from_cache(ApiTypes.Events, verbose=verbose),
+        evolutions = get_from_cache(ApiTypes.Evolutions, verbose=verbose),
+        food = get_from_cache(ApiTypes.Food, verbose=verbose),
+        leader_skills = get_from_cache(ApiTypes.LeaderSkills, verbose=verbose),
+        materials = get_from_cache(ApiTypes.Materials, verbose=verbose),
+        monsters = get_from_cache(ApiTypes.Monsters, verbose=verbose),
     )

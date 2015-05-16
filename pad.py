@@ -7,7 +7,7 @@ from dataset import get_all_raw_data
 from models import Pad
 
 if __name__ == "__main__":
-    pad = Pad()
+    pad = Pad(verbose=False)
 
     m1 = pad.get_monster(65)
     m1e = pad.evolutions.get_by_id(m1.id)

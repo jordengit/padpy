@@ -42,8 +42,8 @@ XpCurveIds = {
 
 
 class Pad(object):
-    def __init__(self):
-        data = get_all_raw_data()
+    def __init__(self, verbose=False):
+        data = get_all_raw_data(verbose=verbose)
         self.monsters = MonsterManager(data['monsters'])
         self.evolutions = EvolutionManager(data['evolutions'])
         self.active_skills = ActiveSkillManager(data['active_skills'])
