@@ -9,7 +9,13 @@ legwork.
 ## Installation
 
     pip install requests urllib3
-    python pad.py
+    git clone git@github.com:tankorsmash/padpy.git
+    
+*(Optional)* Running `pad.py` the first time will download the data and cache it for next time. This will happen no matter when you use it, so it's optional.
+    python pad.py 
+    
+## Usage
+    
 
 It gets the json from the API and saves it to your drive. Writing the wrappers.
 
