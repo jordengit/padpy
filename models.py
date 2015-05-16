@@ -164,6 +164,9 @@ class XpCurve(object):
             str(self)
         )
 
+    def calc_for_level(self, level):
+        return  round(self.id * (((level-1.0)/98.0)**2.5))
+
 
 class Element(object):
     def __init__(self, id):

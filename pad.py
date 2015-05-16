@@ -15,4 +15,3 @@ if __name__ == "__main__":
 
     print m1
     pp(m1.__dict__)
-
