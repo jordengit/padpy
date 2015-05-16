@@ -56,8 +56,10 @@ class Pad(object):
         monster.evolutions = self.evolutions.get_by_id(monster.id)
         monster.awakenings = self.awakenings.get_for_monster(monster)
         monster.leader_skill = self.leader_skills.get_for_monster(monster)
-
         return monster
+
+    def get_all_monsters(self):
+        return self.monsters.objects
 
 class BaseManager(object):
     identifier = "id"
@@ -125,7 +127,7 @@ class ActiveSkill(object):
 
     def __str__(self):
         return "ActiveSkill: {name}".format(
-                name=self.name
+            name=self.name.encode('utf8')
         )
 
     def __repr__(self):
@@ -250,7 +252,7 @@ class Monster(object):
     def __str__(self):
         return "#{id} {name}".format(
             id=self.id,
-            name=self.name,
+            name=self.name.encode('utf8'),
         )
 
     def __repr__(self):
@@ -389,7 +391,7 @@ class LeaderSkill(object):
 
     def __str__(self):
         return "LeaderSkill: {name}".format(
-            name=self.name
+            name=self.name.encode('utf8')
         )
 
     def __repr__(self):
@@ -431,7 +433,7 @@ class Awakening(object):
     def __str__(self):
         return "Awakening: #{id} {name}".format(
             id=self.id,
-            name=self.name,
+            name=self.name.encode('utf8'),
         )
 
     def __repr__(self):
