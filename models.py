@@ -16,23 +16,35 @@ class Pad(object):
 
         return monster
 
-class MonsterManager(object):
-    def __init__(self, monsters):
-        self.load_data(monsters)
+class BaseManager(object):
+    def __init__(self, data):
+        self.load_data(data)
 
-    def load_data(self, monsters):
-        self.monsters = []
-        for monster in monsters:
-            mon_obj = Monster(**monster)
-            self.monsters.append(mon_obj)
+    @property
+    def model(self):
+        return None
+
+    def build_obj(self, **kwargs):
+        return self.model(**kwargs)
+
+    def load_data(self, data):
+        self.objects = []
+        for d in data:
+            obj = self.build_obj(**d)
+            self.objects.append(obj)
 
     def get_by_id(self, id):
-        monsters =  filter(lambda monster: int(monster.id) == int(id), self.monsters)
-        if monsters:
-            assert(len(monsters)==1)# there should only be 1 monster with this id
-            return monsters[0] 
+        objects =  filter(lambda obj: int(obj.id) == int(id), self.objects)
+        if objects:
+            assert(len(objects)==1)# there should only be 1 object with this id
+            return objects[0] 
         else:
             return None
+
+class MonsterManager(BaseManager):
+    @property
+    def model(self):
+        return Monster
 
 class ActiveSkillManager(object):
     def __init__(self, active_skills):
