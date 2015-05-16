@@ -218,22 +218,6 @@ class EvolutionManager(BaseManager):
             evo_data['materials'],
         )
 
-    # def load_data(self, data):
-    #     self.objects = []
-    #     for monster_id, obj_set in data.iteritems():
-    #         for obj_data in obj_set:
-    #             obj = self.model(
-    #                 monster_id,
-    #                 obj_data['is_ultimate'],
-    #                 obj_data['evolves_to'],
-    #                 obj_data['materials'],
-    #             )
-    #             self.objects.append(obj)
-
-    # def get_by_id(self, id):
-    #     return filter(lambda evo: int(evo.monster_id) == int(id), self.evolutions)
-
-
 class Awakening(object):
     def __init__(self, id, name, description):
         self.id = int(id)
