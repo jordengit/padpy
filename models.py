@@ -234,7 +234,7 @@ class Attribute(object):
         self.owner = owner
 
     def __str__(self):
-        return "Attr {min}/{max} * {scale}".format(
+        return "Attribute {min}/{max} * {scale}".format(
                 min=self.min,
                 max=self.max,
                 scale=self.scale
