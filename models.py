@@ -49,9 +49,9 @@ class ActiveSkillManager(object):
                     skill['name'],
                 )
                 self.active_skills.append(mon_obj)
-            except:
-                import ipdb; ipdb.set_trace()
-
+            except Exception as e:
+                print e
+                print skill
 
     def get_by_id(self, name):
         active_skills =  filter(lambda skill: skill.name == name, self.active_skills)
@@ -245,7 +245,6 @@ class AwakeningManager(object):
             except Exception as e:
                 print e
                 print data
-                import ipdb; ipdb.set_trace()
 
     def get_for_monster(self, monster):
         awakes = []
