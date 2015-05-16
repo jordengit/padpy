@@ -1,4 +1,17 @@
+from enum import Enum
+
 from dataset import get_all_raw_data
+
+ElementTypes = Enum("ElementTypes", "Fire Water Wood Dark Light NoElement")
+ElementIds = {
+    0:ElementTypes.Fire,
+    1:ElementTypes.Water,
+    2:ElementTypes.Wood,
+    3:ElementTypes.Dark,
+    4:ElementTypes.Light,
+    None:ElementTypes.NoElement,
+}
+
 
 class Pad(object):
     def __init__(self):
@@ -105,6 +118,25 @@ class Image(object):
     def __repr__(self):
         return "<%s>" % str(self)
 
+class Element(object):
+    def __init__(self, id):
+        self.id = id
+        pass
+
+    @property
+    def long_name(self):
+        return ElementIds[self.id].name
+
+    def __str__(self):
+        return "Element {}".format(
+            self.long_name,
+        )
+
+    def __repr__(self):
+        return "<{}>".format(
+            str(self)
+        )
+
 class Attribute(object):
     def __init__(self, max, min, scale, owner):
         self.max = max
@@ -150,8 +182,8 @@ class Monster(object):
         self.awoken_skills = kwargs['awoken_skills']
         self.leader_skill = kwargs['leader_skill']
 
-        self.element = kwargs['element']
-        self.element2 = kwargs['element2']
+        self.element = Element(kwargs['element'])
+        self.element2 = Element(kwargs['element2'])
         self.type = kwargs['type']
         self.type2 = kwargs['type2']
 
