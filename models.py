@@ -17,6 +17,45 @@ class MonsterManager(object):
         else:
             return None
 
+class ActiveSkillManager(object):
+    def __init__(self, active_skills):
+        self.load_data(active_skills)
+
+    def load_data(self, active_skills):
+        self.active_skills = []
+        for skill in active_skills:
+            mon_obj = ActiveSkill(
+                skill['min_cooldown'],
+                skill['effect'],
+                skill['max_cooldown'],
+                skill['name'],
+            )
+            self.active_skills.append(mon_obj)
+
+    def get_by_id(self, name):
+        active_skills =  filter(lambda skill: skill.name == name, self.active_skills)
+        if active_skills:
+            assert(len(active_skills)==1)# there should only be 1 monster with this id
+            return active_skills[0] 
+        else:
+            return None
+
+class ActiveSkill(object):
+    def __init__(self, min_cooldown, effect, max_cooldown, name):
+        self.min_cooldown = int(min_cooldown)
+        self.effect = effect
+        self.max_cooldown = int(max_cooldown)
+        self.name = name
+
+    def __str__(self):
+        return "ActiveSkill: {name}".format(
+                name=self.name
+        )
+
+    def __repr__(self):
+        return str(self)
+
+
 
 class Image(object):
     def __init__(self, href, size, owner):
