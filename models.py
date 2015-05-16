@@ -172,7 +172,7 @@ class Monster(object):
 
         self.jp_only = kwargs['jp_only']
 
-class EvolutionCompontent(object):
+class EvolutionComponent(object):
     def __init__(self, monster_id, count, owner):
         self.monster_id = monster_id
         self.count = count
@@ -199,7 +199,7 @@ class Evolution(object):
     def load_materials(self, materials):
         self.materials = []
         for m_id, count in materials:
-            material = EvolutionCompontent(m_id, count, self)
+            material = EvolutionComponent(m_id, count, self)
             self.materials.append(material)
 
 class EvolutionManager(BaseManager):
