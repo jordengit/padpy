@@ -1,3 +1,4 @@
+import sys
 import json
 import requests
 
@@ -9,8 +10,9 @@ from models import Pad
 if __name__ == "__main__":
     pad = Pad(verbose=False)
 
-    m1 = pad.get_monster(65)
-    m1e = pad.evolutions.get_by_id(m1.id)
-    m1a = pad.active_skills.get_by_id(m1.active_skill)
+    monster_id = int(sys.argv[1])
+    m1 = pad.get_monster(monster_id)
 
     monsters = pad.get_all_monsters()
+
+    pp(pad.get_evolution_tree(m1))

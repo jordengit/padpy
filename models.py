@@ -50,6 +50,9 @@ class Pad(object):
         self.awakenings = AwakeningManager(data['awakenings'])
         self.leader_skills = LeaderSkillManager(data['leader_skills'])
 
+    def sort(self, monsters):
+        return sorted(monsters, key=lambda monster: monster.id)
+
     def get_monster(self, id):
         monster = self.monsters.get_by_id(id)
         monster.active_skill = self.active_skills.get_by_id(monster.active_skill_name)
@@ -57,6 +60,31 @@ class Pad(object):
         monster.awakenings = self.awakenings.get_for_monster(monster)
         monster.leader_skill = self.leader_skills.get_for_monster(monster)
         return monster
+
+    def get_evolution_tree(self, monster):
+        """ 
+        find all evolutions that either come from, or start before this monster
+        """
+        tree = [monster]
+        #before
+        prevos_to_check = self.evolutions.get_by_evolves_to(monster.id)
+        while prevos_to_check:
+            prevo_check = self.get_monster(prevos_to_check.pop().monster_id)
+            if prevo_check not in tree:
+                tree.append(prevo_check)
+                for prevo in self.evolutions.get_by_evolves_to(prevo_check.id):
+                    prevos_to_check.append(prevo)
+
+        #after
+        evos_to_check = monster.evolutions
+        while evos_to_check:
+            check_monster = self.get_monster(evos_to_check.pop().evolves_to)
+            if check_monster not in tree:
+                tree.append(check_monster)
+                for evo in check_monster.evolutions:
+                    evos_to_check.append(evo)
+
+        return self.sort(tree)
 
     def get_all_monsters(self):
         return self.monsters.objects
@@ -386,6 +414,10 @@ class EvolutionManager(BaseManager):
             evo_data['evolves_to'],
             evo_data['materials'],
         )
+
+    def get_by_evolves_to(self, evolves_to):
+        objects =  filter(lambda obj: obj.evolves_to == evolves_to, self.objects)
+        return objects
 
 class LeaderSkillData(object):
     def __init__(self, hp, atk, rcv, *contraints):
