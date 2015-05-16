@@ -42,6 +42,25 @@ XpCurveIds = {
 
 
 class Pad(object):
+    """
+    This is the main object you'll be using to access all the data
+
+    >>> pad = Pad(verbose=False)
+    >>> monsters = pad.get_all_monsters()
+    >>> ice_ogre = pad.get_monster(65)
+    >>> ice_ogre.feed_xp
+    <FeedExp 413.0>
+    >>> ice_ogre.feed_xp.calc_for_level(12)
+    4956.0
+    >>> ice_ogre.atk
+    <Attribute 277/875 * 1.0>
+
+    >>> monsters_in_ice_ogre_tree = pad.get_evolution_tree(ice_ogre)
+    [<Monster #64 Blue Ogre>,
+     <Monster #65 Ice Ogre>,
+     <Monster #312 Blazing Ice Ogre>,
+     <Monster #313 Wood Ice Ogre>]
+    """
     def __init__(self, verbose=False):
         data = get_all_raw_data(verbose=verbose)
         self.monsters = MonsterManager(data['monsters'])
@@ -50,9 +69,6 @@ class Pad(object):
         self.awakenings = AwakeningManager(data['awakenings'])
         self.leader_skills = LeaderSkillManager(data['leader_skills'])
 
-    def sort(self, monsters):
-        return sorted(monsters, key=lambda monster: monster.id)
-
     def get_monster(self, id):
         monster = self.monsters.get_by_id(id)
         monster.active_skill = self.active_skills.get_by_id(monster.active_skill_name)
@@ -60,6 +76,12 @@ class Pad(object):
         monster.awakenings = self.awakenings.get_for_monster(monster)
         monster.leader_skill = self.leader_skills.get_for_monster(monster)
         return monster
+
+    def get_all_monsters(self):
+        return self.sort(self.monsters.objects)
+
+    def sort(self, monsters):
+        return sorted(monsters, key=lambda monster: monster.id)
 
     def get_evolution_tree(self, monster):
         """ 
@@ -86,8 +108,6 @@ class Pad(object):
 
         return self.sort(tree)
 
-    def get_all_monsters(self):
-        return self.monsters.objects
 
 class BaseManager(object):
     identifier = "id"
@@ -218,7 +238,7 @@ class FeedXp(object):
         )
 
     def calc_for_level(self, level):
-        return self.base * level
+        return self.base_xp * level
 
 
 class Element(object):

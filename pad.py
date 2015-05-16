@@ -15,4 +15,3 @@ if __name__ == "__main__":
 
     monsters = pad.get_all_monsters()
 
-    pp(pad.get_evolution_tree(m1))
