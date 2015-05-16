@@ -16,6 +16,25 @@ legwork.
     
 ## Usage
     
+    >>> pad = Pad(verbose=False)
+    >>> monsters = pad.get_all_monsters()
+    >>> ice_ogre = pad.get_monster(65)
+    
+    >>> ice_ogre.feed_xp
+    <FeedExp 413.0>
+    >>> ice_ogre.feed_xp.calc_for_level(12)
+    4956.0
+    >>> ice_ogre.atk
+    <Attribute 277/875 * 1.0>
+    
+    >>> monsters_in_ice_ogre_tree = pad.get_evolution_tree(ice_ogre)
+    [<Monster #64 Blue Ogre>,
+     <Monster #65 Ice Ogre>,
+     <Monster #312 Blazing Ice Ogre>,
+     <Monster #313 Wood Ice Ogre>]
+     
+     >>> print ice_ogre.__dict__ #for more 
+
 
 It gets the json from the API and saves it to your drive. Writing the wrappers.
 
