@@ -18,7 +18,7 @@ class Pad(object):
 
 class BaseManager(object):
     identifier = "id"
-    nested_load = False
+    nested_dict = False
 
     def __init__(self, data):
         self.load_data(data)
@@ -32,7 +32,7 @@ class BaseManager(object):
 
     def load_data(self, data):
         self.objects = []
-        if not self.nested_load:
+        if not self.nested_dict:
             for d in data:
                 obj = self.build_obj(**d)
                 self.objects.append(obj)
@@ -204,14 +204,11 @@ class Evolution(object):
 
 class EvolutionManager(BaseManager):
     identifier = "monster_id"
-    nested_load = True
+    nested_dict = True
 
     @property
     def model(self):
         return Evolution
-
-    # def __init__(self, evolutions):
-    #     self.load_data(evolutions)
 
     def build_obj(self, monster_id, **evo_data):
         return self.model(
@@ -254,23 +251,17 @@ class Awakening(object):
             str=str(self)
         )
 
-class AwakeningManager(object):
-    def __init__(self, evolutions):
-        self.load_data(evolutions)
+class AwakeningManager(BaseManager):
+    @property
+    def model(self):
+        return Awakening
 
-    def load_data(self, awakenings):
-        self.awakenings = []
-        for data in awakenings:
-            try:
-                awake = Awakening(
-                    data['id'],
-                    data['name'],
-                    data['desc'],
-                )
-                self.awakenings.append(awake)
-            except Exception as e:
-                print e
-                print data
+    def build_obj(self, **kwargs):
+        return self.model(
+            kwargs['id'],
+            kwargs['name'],
+            kwargs['desc'],
+        )
 
     def get_for_monster(self, monster):
         awakes = []
@@ -278,12 +269,3 @@ class AwakeningManager(object):
             awk = self.get_by_id(awk_id)
             awakes.append(awk)
         return awakes
-
-
-    def get_by_id(self, id):
-        result = filter(lambda awake: int(awake.id) == int(id), self.awakenings)
-        if result:
-            assert(len(result)==1)
-            return result[0]
-        return result
-
