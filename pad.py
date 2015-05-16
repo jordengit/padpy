@@ -7,9 +7,12 @@ from models import Pad
 if __name__ == "__main__":
     pad = Pad()
 
-    m1 = pad.monsters.get_by_id(1)
+    m1 = pad.get_monster(1)
     m1e = pad.evolutions.get_by_id(m1.id)
-    m1a = pad.active_skills.get_by_id(m1.active_skill)
+    # m1a = pad.active_skills.get_by_id(m1.active_skill)
+    # print m1e
+    # import ipdb; ipdb.set_trace()
+
 
 
 

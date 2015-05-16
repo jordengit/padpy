@@ -7,6 +7,13 @@ class Pad(object):
         self.evolutions = EvolutionManager(data['evolutions'])
         self.active_skills = ActiveSkillManager(data['active_skills'])
 
+    def get_monster(self, id):
+        monster = self.monsters.get_by_id(id)
+        monster.active_skill = self.active_skills.get_by_id(monster.active_skill_name)
+        monster.evolutions = self.evolutions.get_by_id(monster.id)
+
+        return monster
+
 class MonsterManager(object):
     def __init__(self, monsters):
         self.load_data(monsters)
@@ -101,7 +108,8 @@ class Monster(object):
         self.feed_xp = kwargs['feed_xp']
         self.xp_curve = kwargs['xp_curve']
 
-        self.active_skill = kwargs['active_skill']
+        self.active_skill = ActiveSkill(0, 'Unset Active Skill', 0, 'Unset Active Skill Name')
+        self.active_skill_name = kwargs['active_skill']
         self.awoken_skills = kwargs['awoken_skills']
         self.leader_skill = kwargs['leader_skill']
 
@@ -159,6 +167,17 @@ class Evolution(object):
         self.evolves_to = int(evolves_to)
 
         self.load_materials(materials)
+
+    def __str__(self):
+        return "Evolution: {base} -> {into}".format(
+            base=self.monster_id,
+            into=self.evolves_to,
+        )
+
+    def __repr__(self):
+        return "<{str}>".format(
+            str=str(self)
+        )
 
     def load_materials(self, materials):
         self.materials = []
