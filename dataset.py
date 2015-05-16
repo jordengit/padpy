@@ -77,7 +77,7 @@ def get_from_cache(api_type):
 
     return val
 
-def get_all_data():
+def get_all_raw_data():
     return dict(
         active_skills = get_from_cache(ApiTypes.ActiveSkills),
         awakenings = get_from_cache(ApiTypes.Awakenings),
