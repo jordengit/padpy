@@ -63,6 +63,8 @@ class Pad(object):
 
 class BaseManager(object):
     identifier = "id"
+    can_find_many = False
+
     nested_dict = False
 
     def __init__(self, data):
@@ -92,11 +94,12 @@ class BaseManager(object):
 
     def get_by_id(self, id):
         objects =  filter(lambda obj: getattr(obj, self.identifier) == id, self.objects)
-        if objects:
-            assert(len(objects)==1)# there should only be 1 object with this id
-            return objects[0] 
-        else:
-            return None
+        if not self.can_find_many:
+            if objects:
+                assert(len(objects)==1)# there should only be 1 object with this id
+                return objects[0] 
+
+        return objects
 
 class MonsterManager(BaseManager):
     @property
@@ -349,6 +352,12 @@ class Evolution(object):
             into=self.evolves_to,
         )
 
+    def pretty(self, pad):
+        return "Evolution: {base} -> {into}".format(
+            base=str(pad.get_monster(self.monster_id)),
+            into=str(pad.get_monster(self.evolves_to)),
+        )
+
     def __repr__(self):
         return "<{str}>".format(
             str=str(self)
@@ -362,6 +371,8 @@ class Evolution(object):
 
 class EvolutionManager(BaseManager):
     identifier = "monster_id"
+    can_find_many = True
+
     nested_dict = True
 
     @property
