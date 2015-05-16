@@ -28,6 +28,18 @@ TypeIds = {
     None : TypeTypes.NoType,
 }
 
+XpCurveTypes = Enum("XpCurveTypes", "One OnePointFive Two TwoPointFive Three  Four Five NoCurve")
+XpCurveIds = { 
+    1000000 : XpCurveTypes.One,
+    1500000 : XpCurveTypes.OnePointFive,
+    2000000 : XpCurveTypes.Two,
+    2500000 : XpCurveTypes.TwoPointFive,
+    3000000 : XpCurveTypes.Three,
+    4000000 : XpCurveTypes.Four,
+    5000000 : XpCurveTypes.Five,
+    None : XpCurveTypes.NoCurve,
+}
+
 
 class Pad(object):
     def __init__(self):
@@ -134,6 +146,25 @@ class Image(object):
     def __repr__(self):
         return "<%s>" % str(self)
 
+class XpCurve(object):
+    def __init__(self, id):
+        self.id = id
+
+    @property
+    def long_name(self):
+        return XpCurveIds[self.id].name
+
+    def __str__(self):
+        return "XP Curve {}".format(
+            self.long_name,
+        )
+
+    def __repr__(self):
+        return "<{}>".format(
+            str(self)
+        )
+
+
 class Element(object):
     def __init__(self, id):
         self.id = id
@@ -210,7 +241,8 @@ class Monster(object):
         self.max_level = kwargs['max_level']
         self.team_cost = kwargs['team_cost']
         self.feed_xp = kwargs['feed_xp']
-        self.xp_curve = kwargs['xp_curve']
+        self.xp_curve = XpCurve(kwargs['xp_curve'])
+        self.xp_curve_id = kwargs['xp_curve']
 
         self.active_skill = ActiveSkill(0, 'Unset Active Skill', 0, 'Unset Active Skill Name')
         self.active_skill_name = kwargs['active_skill']
