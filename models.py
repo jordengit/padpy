@@ -167,6 +167,24 @@ class XpCurve(object):
     def calc_for_level(self, level):
         return  round(self.id * (((level-1.0)/98.0)**2.5))
 
+class FeedXp(object):
+    def __init__(self, base_xp):
+        self.base_xp = base_xp
+        pass
+
+    def __str__(self):
+        return "FeedExp {}".format(
+            self.base_xp,
+        )
+
+    def __repr__(self):
+        return "<{}>".format(
+            str(self)
+        )
+
+    def calc_for_level(self, level):
+        return self.base * level
+
 
 class Element(object):
     def __init__(self, id):
@@ -243,9 +261,12 @@ class Monster(object):
         self.rarity = kwargs['rarity']
         self.max_level = kwargs['max_level']
         self.team_cost = kwargs['team_cost']
-        self.feed_xp = kwargs['feed_xp']
+
+        self.feed_xp = FeedXp(kwargs['feed_xp'])
+        self.feed_xp_raw = kwargs['feed_xp']
+
         self.xp_curve = XpCurve(kwargs['xp_curve'])
-        self.xp_curve_id = kwargs['xp_curve']
+        self.xp_curve_raw = kwargs['xp_curve']
 
         self.active_skill = ActiveSkill(0, 'Unset Active Skill', 0, 'Unset Active Skill Name')
         self.active_skill_name = kwargs['active_skill']
