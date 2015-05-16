@@ -18,6 +18,7 @@ class Pad(object):
 
 class BaseManager(object):
     identifier = "id"
+    nested_load = False
 
     def __init__(self, data):
         self.load_data(data)
@@ -31,9 +32,18 @@ class BaseManager(object):
 
     def load_data(self, data):
         self.objects = []
-        for d in data:
-            obj = self.build_obj(**d)
-            self.objects.append(obj)
+        if not self.nested_load:
+            for d in data:
+                obj = self.build_obj(**d)
+                self.objects.append(obj)
+        else:
+            for key, obj_set in data.iteritems():
+                for obj_data in obj_set:
+                    obj = self.model(
+                        key,
+                        **obj_data
+                    )
+                    self.objects.append(obj)
 
     def get_by_id(self, id):
         objects =  filter(lambda obj: getattr(obj, self.identifier) == id, self.objects)
@@ -192,24 +202,39 @@ class Evolution(object):
             material = EvolutionCompontent(m_id, count, self)
             self.materials.append(material)
 
-class EvolutionManager(object):
-    def __init__(self, evolutions):
-        self.load_data(evolutions)
+class EvolutionManager(BaseManager):
+    identifier = "monster_id"
+    nested_load = True
 
-    def load_data(self, evolutions):
-        self.evolutions = []
-        for monster_id, evo_set in evolutions.iteritems():
-            for evo_data in evo_set:
-                evo = Evolution(
-                    monster_id,
-                    evo_data['is_ultimate'],
-                    evo_data['evolves_to'],
-                    evo_data['materials'],
-                )
-                self.evolutions.append(evo)
+    @property
+    def model(self):
+        return Evolution
 
-    def get_by_id(self, id):
-        return filter(lambda evo: int(evo.monster_id) == int(id), self.evolutions)
+    # def __init__(self, evolutions):
+    #     self.load_data(evolutions)
+
+    def build_obj(self, monster_id, **evo_data):
+        return self.model(
+            monster_id,
+            evo_data['is_ultimate'],
+            evo_data['evolves_to'],
+            evo_data['materials'],
+        )
+
+    # def load_data(self, data):
+    #     self.objects = []
+    #     for monster_id, obj_set in data.iteritems():
+    #         for obj_data in obj_set:
+    #             obj = self.model(
+    #                 monster_id,
+    #                 obj_data['is_ultimate'],
+    #                 obj_data['evolves_to'],
+    #                 obj_data['materials'],
+    #             )
+    #             self.objects.append(obj)
+
+    # def get_by_id(self, id):
+    #     return filter(lambda evo: int(evo.monster_id) == int(id), self.evolutions)
 
 
 class Awakening(object):
