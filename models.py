@@ -6,11 +6,13 @@ class Pad(object):
         self.monsters = MonsterManager(data['monsters'])
         self.evolutions = EvolutionManager(data['evolutions'])
         self.active_skills = ActiveSkillManager(data['active_skills'])
+        self.awakenings = AwakeningManager(data['awakenings'])
 
     def get_monster(self, id):
         monster = self.monsters.get_by_id(id)
         monster.active_skill = self.active_skills.get_by_id(monster.active_skill_name)
         monster.evolutions = self.evolutions.get_by_id(monster.id)
+        monster.awakenings = self.awakenings.get_for_monster(monster)
 
         return monster
 
@@ -39,13 +41,17 @@ class ActiveSkillManager(object):
     def load_data(self, active_skills):
         self.active_skills = []
         for skill in active_skills:
-            mon_obj = ActiveSkill(
-                skill['min_cooldown'],
-                skill['effect'],
-                skill['max_cooldown'],
-                skill['name'],
-            )
-            self.active_skills.append(mon_obj)
+            try:
+                mon_obj = ActiveSkill(
+                    skill['min_cooldown'],
+                    skill['effect'],
+                    skill['max_cooldown'],
+                    skill['name'],
+                )
+                self.active_skills.append(mon_obj)
+            except:
+                import ipdb; ipdb.set_trace()
+
 
     def get_by_id(self, name):
         active_skills =  filter(lambda skill: skill.name == name, self.active_skills)
@@ -187,9 +193,9 @@ class Evolution(object):
 
 class EvolutionManager(object):
     def __init__(self, evolutions):
-        self.load_evolutions(evolutions)
+        self.load_data(evolutions)
 
-    def load_evolutions(self, evolutions):
+    def load_data(self, evolutions):
         self.evolutions = []
         for monster_id, evo_set in evolutions.iteritems():
             for evo_data in evo_set:
@@ -204,4 +210,55 @@ class EvolutionManager(object):
     def get_by_id(self, id):
         return filter(lambda evo: int(evo.monster_id) == int(id), self.evolutions)
 
+
+class Awakening(object):
+    def __init__(self, id, name, description):
+        self.id = int(id)
+        self.name = name
+        self.description = description
+
+    def __str__(self):
+        return "Awakening: #{id} {name}".format(
+            id=self.id,
+            name=self.name,
+        )
+
+    def __repr__(self):
+        return "<{str}>".format(
+            str=str(self)
+        )
+
+class AwakeningManager(object):
+    def __init__(self, evolutions):
+        self.load_data(evolutions)
+
+    def load_data(self, awakenings):
+        self.awakenings = []
+        for data in awakenings:
+            try:
+                awake = Awakening(
+                    data['id'],
+                    data['name'],
+                    data['desc'],
+                )
+                self.awakenings.append(awake)
+            except Exception as e:
+                print e
+                print data
+                import ipdb; ipdb.set_trace()
+
+    def get_for_monster(self, monster):
+        awakes = []
+        for awk_id in monster.awoken_skills:
+            awk = self.get_by_id(awk_id)
+            awakes.append(awk)
+        return awakes
+
+
+    def get_by_id(self, id):
+        result = filter(lambda awake: int(awake.id) == int(id), self.awakenings)
+        if result:
+            assert(len(result)==1)
+            return result[0]
+        return result
 
