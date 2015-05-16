@@ -86,14 +86,24 @@ class ActiveSkill(object):
         )
 
     def __repr__(self):
-        return str(self)
+        return "<%s>" % str(self)
 
 
 class Image(object):
-    def __init__(self, href, size, owner):
+    def __init__(self, type, href, size, owner):
+        self.type = type
         self.href = href
         self.size = size
         self.owner = owner
+
+    def __str__(self):
+        return "Image: {type} for #{id}".format(
+                type=self.type,
+                id=self.owner.id,
+        )
+
+    def __repr__(self):
+        return "<%s>" % str(self)
 
 class Attribute(object):
     def __init__(self, max, min, scale, owner):
@@ -101,6 +111,16 @@ class Attribute(object):
         self.min = min
         self.scale = scale
         self.owner = owner
+
+    def __str__(self):
+        return "Attr {min}/{max} * {scale}".format(
+                min=self.min,
+                max=self.max,
+                scale=self.scale
+        )
+
+    def __repr__(self):
+        return "<%s>" % str(self)
 
 class Monster(object):
     def __init__(self, **kwargs):
@@ -159,12 +179,14 @@ class Monster(object):
         self.name_jp = kwargs['name_jp']
 
         self.image40 = Image(
+            40,
             kwargs['image40_href'],
             kwargs['image40_size'],
             self,
         )
 
         self.image60 = Image(
+            60,
             kwargs['image60_href'],
             kwargs['image60_size'],
             self,
