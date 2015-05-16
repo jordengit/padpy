@@ -1,3 +1,11 @@
+from dataset import get_all_raw_data
+
+class Pad(object):
+    def __init__(self):
+        data = get_all_raw_data()
+        self.monsters = MonsterManager(data['monsters'])
+        self.evolutions = EvolutionManager(data['evolutions'])
+        self.active_skills = ActiveSkillManager(data['active_skills'])
 
 class MonsterManager(object):
     def __init__(self, monsters):
@@ -35,7 +43,7 @@ class ActiveSkillManager(object):
     def get_by_id(self, name):
         active_skills =  filter(lambda skill: skill.name == name, self.active_skills)
         if active_skills:
-            assert(len(active_skills)==1)# there should only be 1 monster with this id
+            assert(len(active_skills)==1)# there should only be 1 activity with this id
             return active_skills[0] 
         else:
             return None
