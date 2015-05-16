@@ -48,12 +48,14 @@ class Pad(object):
         self.evolutions = EvolutionManager(data['evolutions'])
         self.active_skills = ActiveSkillManager(data['active_skills'])
         self.awakenings = AwakeningManager(data['awakenings'])
+        self.leader_skills = LeaderSkillManager(data['leader_skills'])
 
     def get_monster(self, id):
         monster = self.monsters.get_by_id(id)
         monster.active_skill = self.active_skills.get_by_id(monster.active_skill_name)
         monster.evolutions = self.evolutions.get_by_id(monster.id)
         monster.awakenings = self.awakenings.get_for_monster(monster)
+        monster.leader_skill = self.leader_skills.get_for_monster(monster)
 
         return monster
 
@@ -268,10 +270,14 @@ class Monster(object):
         self.xp_curve = XpCurve(kwargs['xp_curve'])
         self.xp_curve_raw = kwargs['xp_curve']
 
-        self.active_skill = ActiveSkill(0, 'Unset Active Skill', 0, 'Unset Active Skill Name')
+        self.active_skill = ActiveSkill(0, 'UNSET ACTIVE SKILL', 0, 'UNSET ACTIVE SKILL NAME')
         self.active_skill_name = kwargs['active_skill']
+
+        # self.awoken_skills_name = Awakening(kwargs['awoken_skills'])
         self.awoken_skills = kwargs['awoken_skills']
-        self.leader_skill = kwargs['leader_skill']
+
+        self.leader_skill = LeaderSkill('UNSET LEADER SKILL', 'UNSET LEADER SKILL', [0, 0, 0, []])
+        self.leader_skill_name = kwargs['leader_skill']
 
         self.element = Element(kwargs['element'])
         self.element_id = kwargs['element']
@@ -367,6 +373,54 @@ class EvolutionManager(BaseManager):
             evo_data['evolves_to'],
             evo_data['materials'],
         )
+
+class LeaderSkillData(object):
+    def __init__(self, hp, atk, rcv, *contraints):
+        self.hp = hp
+        self.atk = atk
+        self.rcv = rcv
+        self.constraints = contraints
+
+class LeaderSkill(object):
+    def __init__(self, name, effect, data=None):
+        self.name = name
+        self.effect = effect
+        self.load_data(data)
+
+    def __str__(self):
+        return "LeaderSkill: {name}".format(
+            name=self.name
+        )
+
+    def __repr__(self):
+        return "<{}>".format(str(self))
+
+    def load_data(self, data):
+        try:
+            if data:
+                self.data = LeaderSkillData(*data)
+            else:
+                self.data = None
+        except Exception as e:
+            print e
+            print data
+            import ipdb; ipdb.set_trace()
+
+
+class LeaderSkillManager(BaseManager):
+    identifier = "name"
+
+    @property
+    def model(self):
+        return LeaderSkill
+
+    def build_obj(self, **kwargs):
+        return self.model(**kwargs)
+
+    def get_for_monster(self, monster):
+        ls = self.get_by_id(monster.leader_skill_name)
+        return ls
+
 
 class Awakening(object):
     def __init__(self, id, name, description):
