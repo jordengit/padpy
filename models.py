@@ -281,9 +281,9 @@ class Type(object):
 
 class Attribute(object):
     def __init__(self, max, min, scale, owner):
-        self.max = max
-        self.min = min
-        self.scale = scale
+        self.max = int(max)
+        self.min = int(min)
+        self.scale = int(scale)
         self.owner = owner
 
     def __str__(self):
@@ -295,6 +295,11 @@ class Attribute(object):
 
     def __repr__(self):
         return "<%s>" % str(self)
+
+    def calc_for_level(self, level):
+        lvl_calc = (level-1.0)/(self.owner.max_level-1.0)
+        result =  self.min + (self.max - self.min) * lvl_calc ** self.scale
+        return round(result)
 
 class Monster(object):
     def __init__(self, **kwargs):
@@ -310,18 +315,18 @@ class Monster(object):
         return "<Monster "+str(self)+">"
 
     def load_data(self, **kwargs):
-        self.id = kwargs['id']
+        self.id = int(kwargs['id'])
         self.version = kwargs['version']
 
         self.rarity = kwargs['rarity']
-        self.max_level = kwargs['max_level']
-        self.team_cost = kwargs['team_cost']
+        self.max_level = int(kwargs['max_level'])
+        self.team_cost = int(kwargs['team_cost'])
 
         self.feed_xp = FeedXp(kwargs['feed_xp'])
-        self.feed_xp_raw = kwargs['feed_xp']
+        self.feed_xp_raw = int(kwargs['feed_xp'])
 
         self.xp_curve = XpCurve(kwargs['xp_curve'])
-        self.xp_curve_raw = kwargs['xp_curve']
+        self.xp_curve_raw = int(kwargs['xp_curve'])
 
         self.active_skill = ActiveSkill(0, 'UNSET ACTIVE SKILL', 0, 'UNSET ACTIVE SKILL NAME')
         self.active_skill_name = kwargs['active_skill']
@@ -333,14 +338,14 @@ class Monster(object):
         self.leader_skill_name = kwargs['leader_skill']
 
         self.element = Element(kwargs['element'])
-        self.element_id = kwargs['element']
+        self.element_id = int(kwargs['element'])
         self.element2 = Element(kwargs['element2'])
-        self.element2_id = kwargs['element2']
+        self.element2_id = int(kwargs['element2']) if kwargs['element2'] else 0
 
         self.type = Type(kwargs['type'])
+        self.type_id = int(kwargs['type']) if kwargs['type'] else 0
         self.type2 = Type(kwargs['type2'])
-        self.type_id = kwargs['type']
-        self.type2_id = kwargs['type2']
+        self.type2_id = int(kwargs['type2']) if kwargs['type2'] else 0
 
 
         self.hp = Attribute(

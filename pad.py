@@ -13,5 +13,5 @@ if __name__ == "__main__":
     monster_id = int(sys.argv[1])
     m1 = pad.get_monster(monster_id)
 
-    monsters = pad.get_all_monsters()
-
+    print 'Monster #%s is: %s' % (monster_id, m1)
+    
