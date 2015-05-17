@@ -21,6 +21,7 @@ class Pad(object):
      <Monster #312 Blazing Ice Ogre>,
      <Monster #313 Wood Ice Ogre>]
     """
+
     def __init__(self, verbose=False):
         data = get_all_raw_data(verbose=verbose)
         self.monsters = MonsterManager(data['monsters'])
@@ -30,6 +31,7 @@ class Pad(object):
         self.leader_skills = LeaderSkillManager(data['leader_skills'])
 
     def populate_monster(self, monster):
+        """ replaces placeholder data with real data """
         monster.active_skill = self.active_skills.get_by_id(monster.active_skill_name)
         monster.evolutions = self.evolutions.get_by_id(monster.id)
         monster.awakenings = self.awakenings.get_for_monster(monster)
@@ -42,6 +44,7 @@ class Pad(object):
         return monster
 
     def get_all_raw_monsters(self):
+        """ get all monster objects before they've been fully populated """
         return self.sort(self.monsters.objects)
 
     def get_all_monsters(self):
@@ -77,24 +80,33 @@ class Pad(object):
 
 
 class BaseManager(object):
-    identifier = "id"
+    """
+    This manages a creates a list of objects from 
+    a JSON list from the PADHerder API and instantiates
+    full objects
+    """
 
-    can_find_many = False
-    has_default_object = False
+    identifier = "id" #used to identify its objects in get_by_id
 
-    nested_dict = False
+    can_find_many = False #whether to return one or a list in get_by_id
+    has_default_object = False #whether to return a default object in get_by_id
+
+    nested_dict = False #special load_data handling case
 
     def __init__(self, data):
         self.load_data(data)
 
     @property
     def model(self):
+        """ The Model this is managing """
         return None
 
     def build_obj(self, **kwargs):
+        """ create the Model instance """
         return self.model(**kwargs)
 
     def load_data(self, data):
+        """ go through the raw data and instantiate the objects """
         self.objects = []
         if not self.nested_dict:
             for d in data:
@@ -110,6 +122,11 @@ class BaseManager(object):
                     self.objects.append(obj)
 
     def get_by_id(self, id):
+        """ 
+        filter through the objects, returning either a 
+        list or a single object, depending on can_find_many 
+        and has_default_object
+        """
         objects =  filter(lambda obj: getattr(obj, self.identifier) == id, self.objects)
         if not self.can_find_many:
             if objects:
@@ -477,6 +494,13 @@ class LeaderSkillData(object):
 
 
 class LeaderSkill(object):
+    """
+    has a name and effect, along with data, 
+    data is an object that contains HP, ATK, and RCV values,
+    plus a list of constraints to which type, or element, 
+    of monsters it applies to
+    """
+
     def __init__(self, name, effect, data=None):
         self.name = name
         self.effect = effect
