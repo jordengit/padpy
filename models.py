@@ -48,13 +48,13 @@ class ConstraintTypes(Enum):
 ConstraintNoneTypes = Enum("ConstraintNoneTypes", "NoConstraint")
 
 ConstraintNoneIds = {
-    -1 : "NoConst"
+    None : ConstraintNoneTypes.NoConstraint
 }
 
 ConstraintIds = {
     'elem' : ConstraintTypes.Element,
     'type' : ConstraintTypes.Type,
-    'none' : ConstraintTypes.NoneSet,
+    None : ConstraintTypes.NoneSet,
 }
 ConstraintMap = {
     ConstraintTypes.Element : ElementIds,
@@ -479,13 +479,16 @@ class EvolutionManager(BaseManager):
         return objects
 
 class LeaderSkillConstraint(object):
-    def __init__(self, const_type=None, val=None):
-        if const_type == None:
-            self.const_type = ConstraintTypes.NoneSet
-            self.val = ConstraintNoneTypes.NoConstraint
-        else:
-            self.const_type = ConstraintIds[const_type]
-            self.load_val(val)
+    def __init__(self, const_type=None, vals=None):
+        self.const_type = ConstraintIds[const_type]
+        self.load_vals(vals if vals else [None])
+
+    def load_vals(self, vals):
+        self.vals = []
+
+        val_enum = ConstraintMap[self.const_type]
+        for val in vals:
+            self.vals.append(val_enum[val])
 
     def __str__(self):
         return "LSContraint: {pretty}".format(
@@ -495,15 +498,8 @@ class LeaderSkillConstraint(object):
     def pretty(self):
         return "{eot}:{val}".format(
             eot=self.const_type.value,
-            val=self.val.name,
+            val="".join(v.name for v in self.vals),
         )
-
-    def load_val(self, val):
-        # if self.const_type != ConstraintTypes.NoneSet:
-            val_enum = ConstraintMap[self.const_type]
-            self.val = val_enum[int(val)]
-        # else:
-        #     self.val = -1
 
     def __repr__(self):
         return "<{}>".format(str(self))
@@ -523,13 +519,17 @@ class LeaderSkillData(object):
             cnsts=" ".join([csnt.pretty() for csnt in self.constraints]),
         )
 
-    def load_constraints(self, constraints):
+    def load_constraints(self, cnsts):
         self.constraints = []
-        if not constraints:
+
+        if not cnsts:
             self.constraints.append(LeaderSkillConstraint(None))
 
-        for csnt in constraints:
-            lsc = LeaderSkillConstraint(csnt[0], csnt[1])
+        for constraint in cnsts:
+            c_type = constraint[0]
+            vals = constraint[1:]
+
+            lsc = LeaderSkillConstraint(c_type, vals)
             self.constraints.append(lsc)
 
 
