@@ -306,9 +306,10 @@ class Monster(object):
         self.load_data(**kwargs)
 
     def __str__(self):
-        return "#{id} {name}".format(
+        return "#{id} {name} ({rarity})".format(
             id=self.id,
             name=self.name.encode('utf8'),
+            rarity=self.rarity*"*",
         )
 
     def __repr__(self):
