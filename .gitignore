@@ -1,12 +1,6 @@
 .DS_Store
 **/.DS_Store
 
-cocos2d/**
-bin/**
-
-**/xcuserdata/**
-**/build/**
-
 *.a
 *.o
 *.o.d
@@ -26,26 +20,8 @@ bin/**
 *.tlog
 
 *ipch*
-proj.win32/Debug.win32/beatupisis.log
+
 
 *.exe
-
-
-proj.win32/Debug.win32/beatupisis.exp
-proj.win32/Debug.win32/beatupisis.ilk
-proj.win32/Debug.win32/vc120.idb
-proj.win32/beatupisis.v12.suo
-proj.win32/Debug.win32/beatupisis.Build.CppClean.log
-proj.win32/Debug.win32/libcocos2d.exp
-proj.win32/Debug.win32/vc120.idb
-
-proj.win32/Debug.win32/*.png
-proj.win32/Debug.win32/*.obj
-proj.win32/Debug.win32/*.mp3
-proj.win32/Debug.win32/*.plist
-proj.win32/Debug.win32/*.json
-
-
-proj.android/assets/*
 
 *.pyc
