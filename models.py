@@ -40,6 +40,17 @@ XpCurveIds = {
     None : XpCurveTypes.NoCurve,
 }
 
+ConstraintTypes = Enum("ConstraintTypes", "Element Type NoneSet")
+ConstraintIds = {
+    'elem' : ConstraintTypes.Element,
+    'type' : ConstraintTypes.Type,
+    'none' : ConstraintTypes.NoneSet,
+}
+ConstraintMap = {
+    ConstraintTypes.Element : ElementIds,
+    ConstraintTypes.Type : TypeIds,
+}
+
 
 class Pad(object):
     """
@@ -445,12 +456,41 @@ class EvolutionManager(BaseManager):
         objects =  filter(lambda obj: obj.evolves_to == evolves_to, self.objects)
         return objects
 
+class LeaderSkillConstraint(object):
+    def __init__(self, const_type, val):
+        self.const_type = ConstraintIds[const_type]
+
+        if self.const_type != ConstraintTypes.NoneSet:
+            val_enum = ConstraintMap[self.const_type]
+            self.val = val_enum[int(val)]
+
+        else:
+            self.val = -1
+
+    def __str__(self):
+        return "LSContraint: {eot} {val}".format(
+            eot=self.const_type,
+            val=self.val,
+        )
+
+    def __repr__(self):
+        return "<{}>".format(str(self))
+
 class LeaderSkillData(object):
-    def __init__(self, hp, atk, rcv, *contraints):
+    def __init__(self, hp, atk, rcv, *constraints):
         self.hp = hp
         self.atk = atk
         self.rcv = rcv
-        self.constraints = contraints
+        self.load_constraints(constraints)
+
+    def load_constraints(self, constraints):
+        self.constraints = []
+        for csnt in constraints:
+            if not csnt:
+                lsc = LeaderSkillConstraint('none', -1)
+            else:
+                lsc = LeaderSkillConstraint(csnt[0], csnt[1])
+            self.constraints.append(lsc)
 
 class LeaderSkill(object):
     def __init__(self, name, effect, data=None):
@@ -467,15 +507,10 @@ class LeaderSkill(object):
         return "<{}>".format(str(self))
 
     def load_data(self, data):
-        try:
-            if data:
-                self.data = LeaderSkillData(*data)
-            else:
-                self.data = None
-        except Exception as e:
-            print e
-            print data
-            import ipdb; ipdb.set_trace()
+        if data:
+            self.data = LeaderSkillData(*data)
+        else:
+            self.data = None
 
 
 class LeaderSkillManager(BaseManager):

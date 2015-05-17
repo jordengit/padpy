@@ -14,4 +14,3 @@ if __name__ == "__main__":
     m1 = pad.get_monster(monster_id)
 
     print 'Monster #%s is: %s' % (monster_id, m1)
-    
