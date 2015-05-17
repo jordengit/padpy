@@ -60,7 +60,6 @@ It gets the json from the API and saves it to your drive. Writing the wrappers.
 * Wrap the following so they're not plain dicts
   * Events
   * Food
-  * LeaderSkills
 
 * Query on monsters
   * filter by whatever
