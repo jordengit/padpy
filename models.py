@@ -40,7 +40,11 @@ XpCurveIds = {
     None : XpCurveTypes.NoCurve,
 }
 
-ConstraintTypes = Enum("ConstraintTypes", "Element Type NoneSet")
+class ConstraintTypes(Enum):
+   Element="El"
+   Type = "Ty"
+   NoneSet = "NoneSet"
+
 ConstraintIds = {
     'elem' : ConstraintTypes.Element,
     'type' : ConstraintTypes.Type,
@@ -459,19 +463,25 @@ class EvolutionManager(BaseManager):
 class LeaderSkillConstraint(object):
     def __init__(self, const_type, val):
         self.const_type = ConstraintIds[const_type]
+        self.load_val(val)
 
+    def __str__(self):
+        return "LSContraint: {pretty}".format(
+            pretty=self.pretty(),
+        )
+
+    def pretty(self):
+        return "{eot}:{val}".format(
+            eot=self.const_type.value,
+            val=self.val.name,
+        )
+
+    def load_val(self, val):
         if self.const_type != ConstraintTypes.NoneSet:
             val_enum = ConstraintMap[self.const_type]
             self.val = val_enum[int(val)]
-
         else:
             self.val = -1
-
-    def __str__(self):
-        return "LSContraint: {eot} {val}".format(
-            eot=self.const_type,
-            val=self.val,
-        )
 
     def __repr__(self):
         return "<{}>".format(str(self))
@@ -482,6 +492,14 @@ class LeaderSkillData(object):
         self.atk = atk
         self.rcv = rcv
         self.load_constraints(constraints)
+
+    def __str__(self):
+        return "LSData: HPx{hp}/ATKx{atk}/RCVx{rcv} for {cnsts}".format(
+            hp=self.hp,
+            atk=self.atk,
+            rcv=self.rcv,
+            cnsts=" ".join([csnt.pretty() for csnt in self.constraints]),
+        )
 
     def load_constraints(self, constraints):
         self.constraints = []
