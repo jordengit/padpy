@@ -45,6 +45,12 @@ class ConstraintTypes(Enum):
    Type = "Ty"
    NoneSet = "NoneSet"
 
+ConstraintNoneTypes = Enum("ConstraintNoneTypes", "NoneType")
+
+ConstraintNoneIds = {
+    -1 : "NoneSet"
+}
+
 ConstraintIds = {
     'elem' : ConstraintTypes.Element,
     'type' : ConstraintTypes.Type,
@@ -53,6 +59,7 @@ ConstraintIds = {
 ConstraintMap = {
     ConstraintTypes.Element : ElementIds,
     ConstraintTypes.Type : TypeIds,
+    ConstraintTypes.NoneSet : ConstraintNoneIds,
 }
 
 
@@ -92,8 +99,11 @@ class Pad(object):
         monster.leader_skill = self.leader_skills.get_for_monster(monster)
         return monster
 
-    def get_all_monsters(self):
+    def get_all_raw_monsters(self):
         return self.sort(self.monsters.objects)
+
+    def get_all_monsters(self):
+        return self.sort([self.get_monster(m.id) for m in self.get_all_raw_monsters()])
 
     def sort(self, monsters):
         return sorted(monsters, key=lambda monster: monster.id)
@@ -127,6 +137,7 @@ class Pad(object):
 class BaseManager(object):
     identifier = "id"
     can_find_many = False
+    has_default_object = False
 
     nested_dict = False
 
@@ -161,6 +172,9 @@ class BaseManager(object):
             if objects:
                 assert(len(objects)==1)# there should only be 1 object with this id
                 return objects[0] 
+
+        if not objects and self.has_default_object:
+            return self.get_default_object()
 
         return objects
 
@@ -350,7 +364,11 @@ class Monster(object):
         # self.awoken_skills_name = Awakening(kwargs['awoken_skills'])
         self.awoken_skills = kwargs['awoken_skills']
 
-        self.leader_skill = LeaderSkill('UNSET LEADER SKILL', 'UNSET LEADER SKILL', [0, 0, 0, []])
+        self.leader_skill = LeaderSkill(
+            'UNSET LEADER SKILL',
+            'UNSET LEADER SKILL',
+            [0, 0, 0, [None, None]]
+        )
         self.leader_skill_name = kwargs['leader_skill']
 
         self.element = Element(kwargs['element'])
@@ -461,9 +479,13 @@ class EvolutionManager(BaseManager):
         return objects
 
 class LeaderSkillConstraint(object):
-    def __init__(self, const_type, val):
-        self.const_type = ConstraintIds[const_type]
-        self.load_val(val)
+    def __init__(self, const_type=None, val=None):
+        if const_type == None:
+            self.const_type = ConstraintTypes.NoneSet
+            self.val = ConstraintNoneTypes.NoneType
+        else:
+            self.const_type = ConstraintIds[const_type]
+            self.load_val(val)
 
     def __str__(self):
         return "LSContraint: {pretty}".format(
@@ -477,17 +499,17 @@ class LeaderSkillConstraint(object):
         )
 
     def load_val(self, val):
-        if self.const_type != ConstraintTypes.NoneSet:
+        # if self.const_type != ConstraintTypes.NoneSet:
             val_enum = ConstraintMap[self.const_type]
             self.val = val_enum[int(val)]
-        else:
-            self.val = -1
+        # else:
+        #     self.val = -1
 
     def __repr__(self):
         return "<{}>".format(str(self))
 
 class LeaderSkillData(object):
-    def __init__(self, hp, atk, rcv, *constraints):
+    def __init__(self, hp=0, atk=0, rcv=0, *constraints):
         self.hp = hp
         self.atk = atk
         self.rcv = rcv
@@ -503,12 +525,13 @@ class LeaderSkillData(object):
 
     def load_constraints(self, constraints):
         self.constraints = []
+        if not constraints:
+            self.constraints.append(LeaderSkillConstraint(None))
+
         for csnt in constraints:
-            if not csnt:
-                lsc = LeaderSkillConstraint('none', -1)
-            else:
-                lsc = LeaderSkillConstraint(csnt[0], csnt[1])
+            lsc = LeaderSkillConstraint(csnt[0], csnt[1])
             self.constraints.append(lsc)
+
 
 class LeaderSkill(object):
     def __init__(self, name, effect, data=None):
@@ -525,14 +548,14 @@ class LeaderSkill(object):
         return "<{}>".format(str(self))
 
     def load_data(self, data):
-        if data:
-            self.data = LeaderSkillData(*data)
-        else:
-            self.data = None
+        if not data:
+            data = []
+        self.data = LeaderSkillData(*data)
 
 
 class LeaderSkillManager(BaseManager):
     identifier = "name"
+    has_default_object = True
 
     @property
     def model(self):
@@ -544,6 +567,9 @@ class LeaderSkillManager(BaseManager):
     def get_for_monster(self, monster):
         ls = self.get_by_id(monster.leader_skill_name)
         return ls
+
+    def get_default_object(self):
+        return LeaderSkill("None", "No Effect", None)
 
 
 class Awakening(object):
