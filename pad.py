@@ -13,4 +13,11 @@ if __name__ == "__main__":
     monster_id = int(sys.argv[1])
     m1 = pad.get_monster(monster_id)
 
-    print 'Monster #%s is: %s' % (monster_id, m1)
+    for m1 in pad.get_all_monsters():
+        print 'Monster #%s is: %s' % (monster_id, m1)
+        ls = m1.leader_skill
+        print "\tLeader Skill", ls
+        ld = ls.data
+        print "\tLeader Data", ld
+        lc = ld.constraints
+        print "\tLeader Constraints", lc
