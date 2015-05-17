@@ -8,7 +8,7 @@ legwork.
 
 ## Installation
 
-    pip install requests urllib3
+    pip install requests urllib3 enum34
     git clone git@github.com:tankorsmash/padpy.git
     
 *(Optional)* Running `pad.py` the first time will download the data and cache it for next time. This will happen no matter when you use it, so it's optional.
