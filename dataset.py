@@ -7,9 +7,13 @@ from enum import Enum
 Uses the api from https://www.padherder.com/api/#data
 """
 
-#hotfix openssl
-import urllib3.contrib.pyopenssl
-urllib3.contrib.pyopenssl.inject_into_urllib3()
+try:
+    #hotfix openssl
+    import urllib3.contrib.pyopenssl
+    urllib3.contrib.pyopenssl.inject_into_urllib3()
+except ImportError as e:
+    print 'caught an error while trying to fix the warning in requests:', e, 'but continuing anyway'
+    print 'check out https://stackoverflow.com/questions/18578439/using-requests-with-tls-doesnt-give-sni-support/18579484#18579484'
 
 BASE_API = "https://www.padherder.com/api"
 DATA_PATH = "data"
