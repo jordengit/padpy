@@ -140,6 +140,7 @@ class Pad(object):
 
 class BaseManager(object):
     identifier = "id"
+
     can_find_many = False
     has_default_object = False
 

@@ -14,7 +14,6 @@ if __name__ == "__main__":
     m1 = pad.get_monster(monster_id)
 
     monsters = pad.get_all_monsters()
-
     for monster in monsters:
         print 'Monster #%s is: %s' % (monster.id, monster)
         ls = monster.leader_skill
