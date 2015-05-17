@@ -43,12 +43,12 @@ XpCurveIds = {
 class ConstraintTypes(Enum):
    Element="El"
    Type = "Ty"
-   NoneSet = "NoneSet"
+   NoneSet = "Nil"
 
-ConstraintNoneTypes = Enum("ConstraintNoneTypes", "NoneType")
+ConstraintNoneTypes = Enum("ConstraintNoneTypes", "NoConstraint")
 
 ConstraintNoneIds = {
-    -1 : "NoneSet"
+    -1 : "NoConst"
 }
 
 ConstraintIds = {
@@ -482,7 +482,7 @@ class LeaderSkillConstraint(object):
     def __init__(self, const_type=None, val=None):
         if const_type == None:
             self.const_type = ConstraintTypes.NoneSet
-            self.val = ConstraintNoneTypes.NoneType
+            self.val = ConstraintNoneTypes.NoConstraint
         else:
             self.const_type = ConstraintIds[const_type]
             self.load_val(val)
