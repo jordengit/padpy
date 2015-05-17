@@ -16,16 +16,16 @@ legwork.
     
 ## Usage
     
-    >>> pad = Pad(verbose=False)
-    >>> monsters = pad.get_all_monsters()
-    >>> ice_ogre = pad.get_monster(65)
+    >>> pad = Pad(verbose=False) #verbosity tells you whether or not the data is retrieved from API or cache
+    >>> monsters = pad.get_all_monsters() #get fill list of monsters
+    >>> ice_ogre = pad.get_monster(65) #get only #65
     
     >>> ice_ogre.feed_xp
     <FeedExp 413.0>
     >>> ice_ogre.feed_xp.calc_for_level(12)
     4956.0
     >>> ice_ogre.atk
-    <Attribute 277/875 * 1.0>
+    <Attribute 277/875 * 1.0> # min/max * scale
     
     >>> monsters_in_ice_ogre_tree = pad.get_evolution_tree(ice_ogre)
     [<Monster #64 Blue Ogre>,
@@ -33,10 +33,10 @@ legwork.
      <Monster #312 Blazing Ice Ogre>,
      <Monster #313 Wood Ice Ogre>]
      
-     >>> print ice_ogre.__dict__ #for more 
+     >>> print ice_ogre.__dict__ #for much more data
 
 
-It gets the json from the API and saves it to your drive. Writing the wrappers.
+It gets the json from the API and saves it to your drive, saving some time. This is under active development.
 
 ## Features
 
