@@ -183,8 +183,8 @@ class Image(object):
 
     def __str__(self):
         return "Image: {type} for #{id}".format(
-                type=self.type,
-                id=self.owner.id,
+            type=self.type,
+            id=self.owner.id,
         )
 
     def __repr__(self):
@@ -233,7 +233,6 @@ class FeedXp(object):
 class Element(object):
     def __init__(self, id):
         self.id = id
-        pass
 
     @property
     def long_name(self):
@@ -277,9 +276,9 @@ class Attribute(object):
 
     def __str__(self):
         return "Attribute {min}/{max} * {scale}".format(
-                min=self.min,
-                max=self.max,
-                scale=self.scale
+            min=self.min,
+            max=self.max,
+            scale=self.scale
         )
 
     def __repr__(self):
