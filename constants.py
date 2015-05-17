@@ -10,6 +10,7 @@ ElementIds = {
     None : ElementTypes.NoElement,
 }
 
+
 TypeTypes = Enum("TypeTypes", "EvoMaterial Balanced Physical Healer Dragon God Attacker Devil AwokenSkillMaterial Protected EnhanceMaterial NoType")
 TypeIds = { 
     0 : TypeTypes.EvoMaterial,
@@ -26,6 +27,7 @@ TypeIds = {
     None : TypeTypes.NoType,
 }
 
+
 XpCurveTypes = Enum("XpCurveTypes", "One OnePointFive Two TwoPointFive Three  Four Five NoCurve")
 XpCurveIds = { 
     1000000 : XpCurveTypes.One,
@@ -38,13 +40,13 @@ XpCurveIds = {
     None : XpCurveTypes.NoCurve,
 }
 
+
 class ConstraintTypes(Enum):
    Element="El"
    Type = "Ty"
    NoneSet = "Nil"
 
 ConstraintNoneTypes = Enum("ConstraintNoneTypes", "NoConstraint")
-
 ConstraintNoneIds = {
     None : ConstraintNoneTypes.NoConstraint
 }
@@ -60,4 +62,13 @@ ConstraintMap = {
     ConstraintTypes.NoneSet : ConstraintNoneIds,
 }
 
+
+class FoodTypes(Enum):
+    Food = "Food"
+    Monster = "Mstr"
+
+FoodIds = {
+    "food" : FoodTypes.Food,
+    "monsters" : FoodTypes.Monster,
+}
 

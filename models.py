@@ -29,6 +29,8 @@ class Pad(object):
         self.active_skills = ActiveSkillManager(data['active_skills'])
         self.awakenings = AwakeningManager(data['awakenings'])
         self.leader_skills = LeaderSkillManager(data['leader_skills'])
+        self.food = FoodManager(data['food'])
+
 
     def populate_monster(self, monster):
         """ replaces placeholder data with real data """
@@ -91,6 +93,7 @@ class BaseManager(object):
     can_find_many = False #whether to return one or a list in get_by_id
     has_default_object = False #whether to return a default object in get_by_id
 
+    nested_list = False #special load_data handling case
     nested_dict = False #special load_data handling case
 
     def __init__(self, data):
@@ -108,16 +111,25 @@ class BaseManager(object):
     def load_data(self, data):
         """ go through the raw data and instantiate the objects """
         self.objects = []
-        if not self.nested_dict:
+        if not self.nested_list and not self.nested_dict:
             for d in data:
                 obj = self.build_obj(**d)
                 self.objects.append(obj)
-        else:
+        elif self.nested_list:
             for key, obj_set in data.iteritems():
                 for obj_data in obj_set:
                     obj = self.model(
                         key,
                         **obj_data
+                    )
+                    self.objects.append(obj)
+        elif self.nested_dict:
+            for key, obj_set in data.iteritems():
+                for obj_key, obj_data in obj_set.iteritems():
+                    obj = self.model(
+                        key,
+                        obj_key,
+                        obj_data
                     )
                     self.objects.append(obj)
 
@@ -419,7 +431,7 @@ class EvolutionManager(BaseManager):
     identifier = "monster_id"
     can_find_many = True
 
-    nested_dict = True
+    nested_list = True
 
     @property
     def model(self):
@@ -573,3 +585,27 @@ class AwakeningManager(BaseManager):
             awk = self.get_by_id(awk_id)
             awakes.append(awk)
         return awakes
+
+class Food(object):
+    def __init__(self, type, id, children):
+        self.type = FoodIds[type]
+        self.id = int(id)
+        self.children = children
+
+    def __str__(self):
+        return "Food {type}#{id} {child}".format(
+            type=self.type.name,
+            id=self.id,
+            child=self.children,
+        )
+
+    def __repr__(self):
+        return "<{}>".format(str(self))
+
+class FoodManager(BaseManager):
+    nested_dict = True
+    can_find_many = True
+
+    @property
+    def model(self):
+        return Food
