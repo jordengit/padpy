@@ -65,6 +65,10 @@ It gets the json from the API and saves it to your drive. Writing the wrappers.
 * Query on monsters
   * filter by whatever
 
+* Integrate with PADHerder's box system (thanks [aznwings](http://www.reddit.com/r/PuzzleAndDragons/comments/367a7c/misc_started_working_on_a_python_api_wrapper_full/crbll31))
+  * Build the best team for ATK, HP, RCV, type, cost etc
+  * Build the closest team according to another team (preset, user generated)
+
 * Determine optimum feed path
 * Dream goal: Monster Box Image parsing, so you can quickly import your monster
   list
