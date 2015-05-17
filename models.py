@@ -91,19 +91,23 @@ class Pad(object):
         self.awakenings = AwakeningManager(data['awakenings'])
         self.leader_skills = LeaderSkillManager(data['leader_skills'])
 
-    def get_monster(self, id):
-        monster = self.monsters.get_by_id(id)
+    def populate_monster(self, monster):
         monster.active_skill = self.active_skills.get_by_id(monster.active_skill_name)
         monster.evolutions = self.evolutions.get_by_id(monster.id)
         monster.awakenings = self.awakenings.get_for_monster(monster)
         monster.leader_skill = self.leader_skills.get_for_monster(monster)
         return monster
 
+    def get_monster(self, id):
+        monster = self.monsters.get_by_id(id)
+        self.populate_monster(monster)
+        return monster
+
     def get_all_raw_monsters(self):
         return self.sort(self.monsters.objects)
 
     def get_all_monsters(self):
-        return self.sort([self.get_monster(m.id) for m in self.get_all_raw_monsters()])
+        return self.sort([self.populate_monster(m) for m in self.get_all_raw_monsters()])
 
     def sort(self, monsters):
         return sorted(monsters, key=lambda monster: monster.id)
