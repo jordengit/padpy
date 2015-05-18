@@ -27,3 +27,9 @@ class MonsterFilter(object):
     def by_leader_skill(self, name):
         return filter(lambda m: m.leader_skill.name == name, self.objects)
 
+    def by_max_level(self, level):
+        return filter(lambda m: m.max_level == int(level), self.objects)
+
+    def by_jp_only(self, jp_only):
+        return filter(lambda m: m.jp_only == bool(jp_only), self.objects)
+
