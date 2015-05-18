@@ -20,10 +20,9 @@ if __name__ == "__main__":
     monster_filter = MonsterFilter(monsters)
 
 
-    by_type2 = monster_filter.by_type2(TypeTypes.Dragon)
-    by_element2 = monster_filter.by_element2(ElementTypes.Fire)
+    filtered = monster_filter.by_team_cost(4)
 
-    for monster in by_type2:
+    for monster in filtered:
         print 'Monster #%s is: %s' % (monster.id, monster)
         ls = monster.leader_skill
         print "\tLeader Skill", ls
