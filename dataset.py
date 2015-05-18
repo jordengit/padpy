@@ -50,8 +50,16 @@ def build_api_path(api_type):
 
 def create_data_path():
     if not os.path.isdir(DATA_PATH):
-        print 'creating data path at', DATA_PATH
-        os.mkdir(DATA_PATH)
+        print 'creating data path at', DATA_PATH,
+        try:
+            raise OSError("perm denied")
+            os.mkdir(DATA_PATH)
+        except OSError as e:
+            print "...couldn't create data directory. Run with admin permissions, or create the data directory manually"
+            return False
+        else:
+            print
+            return True
 
 def get_from_api(api_type):
     api_path = build_api_path(api_type)
@@ -69,8 +77,12 @@ def get_from_cache(api_type, verbose=False):
     )
 
     if not os.path.exists(pathstr): 
-        create_data_path()
-        if verbose: print 'fetching', api_type
+        created = create_data_path()
+        if verbose:
+            if not created:
+                print "Warning", api_type.name, "is not cached for next time"
+            print 'fetching', api_type
+
         val = get_from_api(api_type)
         with open(pathstr, 'w') as f:
             json.dump(val, f)
