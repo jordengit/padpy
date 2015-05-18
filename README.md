@@ -55,6 +55,13 @@ This is under active development.
   * ...by id
   * ...in a given monsters evolution tree
 
+* Filter monsters by 
+  * HP, ATK, RCV
+  * Team Cost
+  * Sub/Element and Sub/Type
+  * Rarity
+  * Active, Leader and Awoken skills
+
 * Getting a given monster's
   * Exp to level up
   * Feed exp at a given level
@@ -66,7 +73,7 @@ This is under active development.
   * Food
 
 * Query on monsters
-  * filter by whatever
+  * filter by crazier stuff
 
 * Integrate with PADHerder's box system (thanks [aznwings](http://www.reddit.com/r/PuzzleAndDragons/comments/367a7c/misc_started_working_on_a_python_api_wrapper_full/crbll31))
   * Build the best team for ATK, HP, RCV, type, cost etc
