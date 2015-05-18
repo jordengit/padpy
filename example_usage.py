@@ -12,3 +12,4 @@ if __name__ == "__main__":
     monsters = padpy.get_all_monsters()
     for monster in monsters:
         padpy.pretty_print(monster)
+        print

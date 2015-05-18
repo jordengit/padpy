@@ -258,8 +258,7 @@ class Monster(object):
         self.active_skill = ActiveSkill(0, 'UNSET ACTIVE SKILL', 0, 'UNSET ACTIVE SKILL NAME')
         self.active_skill_name = kwargs['active_skill']
 
-        # self.awoken_skills_name = Awakening(kwargs['awoken_skills'])
-        self.awoken_skills = kwargs['awoken_skills']
+        self.awoken_skill_ids = kwargs['awoken_skills']
 
         self.leader_skill = LeaderSkill(
             'UNSET LEADER SKILL',
@@ -507,7 +506,7 @@ class AwakeningManager(BaseManager):
 
     def get_for_monster(self, monster):
         awakes = []
-        for awk_id in monster.awoken_skills:
+        for awk_id in monster.awoken_skill_ids:
             awk = self.get_by_id(awk_id)
             awakes.append(awk)
         return awakes

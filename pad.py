@@ -42,7 +42,7 @@ class Pad(object):
         """ replaces placeholder data with real data """
         monster.active_skill = self.active_skills.get_by_id(monster.active_skill_name)
         monster.evolutions = self.evolutions.get_by_id(monster.id)
-        monster.awakenings = self.awakenings.get_for_monster(monster)
+        monster.awoken_skills = self.awakenings.get_for_monster(monster)
         monster.leader_skill = self.leader_skills.get_for_monster(monster)
         return monster
 
