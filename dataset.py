@@ -52,7 +52,6 @@ def create_data_path():
     if not os.path.isdir(DATA_PATH):
         print 'creating data path at', DATA_PATH,
         try:
-            raise OSError("perm denied")
             os.mkdir(DATA_PATH)
         except OSError as e:
             print "...couldn't create data directory. Run with admin permissions, or create the data directory manually"
