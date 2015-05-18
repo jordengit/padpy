@@ -21,3 +21,6 @@ class MonsterFilter(object):
     def by_team_cost(self, cost):
         return filter(lambda m: m.team_cost == int(cost), self.objects)
 
+    def by_active_skill(self, name):
+        return filter(lambda m: m.active_skill.name == name, self.objects)
+

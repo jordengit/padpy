@@ -16,11 +16,9 @@ if __name__ == "__main__":
     m1 = pad.get_monster(monster_id)
 
     monsters = pad.get_all_monsters()
-
     monster_filter = MonsterFilter(monsters)
 
-
-    filtered = monster_filter.by_team_cost(4)
+    filtered = monster_filter.by_active_skill("Magma Breath")
 
     for monster in filtered:
         print 'Monster #%s is: %s' % (monster.id, monster)

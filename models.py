@@ -157,6 +157,7 @@ class MonsterManager(BaseManager):
 
 class ActiveSkillManager(BaseManager):
     identifier = "name"
+    has_default_object = True
 
     @property
     def model(self):
@@ -169,6 +170,9 @@ class ActiveSkillManager(BaseManager):
             skill['max_cooldown'],
             skill['name'],
         )
+
+    def get_default_object(self):
+        return ActiveSkill("0", "No Effect", "0", "No Active Skill")
 
 class ActiveSkill(object):
     def __init__(self, min_cooldown, effect, max_cooldown, name):
