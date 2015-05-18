@@ -85,3 +85,27 @@ class Pad(object):
                     evos_to_check.append(evo)
 
         return self.sort(tree)
+
+    def pretty_print(self, monster):
+        """ 
+        outpus a complete monster information
+        """
+
+        print "  ", str(monster)
+        print "Elements", monster.element, "/",  monster.element2
+        print "Types", monster.type, "/",  monster.type2
+        print
+        print "Active Skill:", monster.active_skill
+        print "Leader Skill:", monster.leader_skill
+        print "Awoken Skills:", monster.awoken_skills
+        print
+        print "HP", monster.hp
+        print "ATK", monster.atk
+        print "RCV", monster.rcv
+        print 
+        print "Max level:", monster.max_level
+        print "Team Cost:", monster.team_cost
+        print "Feed XP:", monster.feed_xp
+        print "XP Curve:", monster.xp_curve
+        print
+        print "Japan Only" if monster.jp_only else "Available Everywhere"

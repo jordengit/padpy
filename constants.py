@@ -28,15 +28,24 @@ TypeIds = {
 }
 
 
-XpCurveTypes = Enum("XpCurveTypes", "One OnePointFive Two TwoPointFive Three  Four Five NoCurve")
+XpCurveTypes = Enum("XpCurveTypes", "One OnePointFive Two TwoPointFive Three ThreePointFive Four FourPointFive Five FivePointFive Six SixPointFive Seven SevenPointFive Eight EightPointFive NoCurve")
 XpCurveIds = { 
     1000000 : XpCurveTypes.One,
     1500000 : XpCurveTypes.OnePointFive,
     2000000 : XpCurveTypes.Two,
     2500000 : XpCurveTypes.TwoPointFive,
     3000000 : XpCurveTypes.Three,
+    3500000 : XpCurveTypes.ThreePointFive,
     4000000 : XpCurveTypes.Four,
+    4500000 : XpCurveTypes.FourPointFive,
     5000000 : XpCurveTypes.Five,
+    5500000 : XpCurveTypes.FivePointFive,
+    6000000 : XpCurveTypes.Six,
+    6500000 : XpCurveTypes.SixPointFive,
+    7000000 : XpCurveTypes.Seven,
+    7500000 : XpCurveTypes.SevenPointFive,
+    8000000 : XpCurveTypes.Eight,
+    8500000 : XpCurveTypes.EightPointFive,
     None : XpCurveTypes.NoCurve,
 }
 

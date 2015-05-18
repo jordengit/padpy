@@ -176,12 +176,12 @@ class Element(object):
         return self.type.name
 
     def __str__(self):
-        return "Element {}".format(
+        return "{}".format(
             self.long_name,
         )
 
     def __repr__(self):
-        return "<{}>".format(
+        return "<Element {}>".format(
             str(self)
         )
 
@@ -195,12 +195,12 @@ class Type(object):
         return self.type.name
 
     def __str__(self):
-        return "Type {}".format(
+        return "{}".format(
             self.long_name,
         )
 
     def __repr__(self):
-        return "<{}>".format(
+        return "<Type {}>".format(
             str(self)
         )
 
@@ -213,14 +213,14 @@ class Attribute(object):
         self.owner = owner
 
     def __str__(self):
-        return "Attribute {min}/{max} * {scale}".format(
+        return "{min}/{max} * {scale}".format(
             min=self.min,
             max=self.max,
             scale=self.scale
         )
 
     def __repr__(self):
-        return "<%s>" % str(self)
+        return "<Attribute %s>" % str(self)
 
     def calc_for_level(self, level):
         lvl_calc = (level-1.0)/(self.owner.max_level-1.0)

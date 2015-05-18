@@ -86,7 +86,7 @@ def get_from_cache(api_type, verbose=False):
         with open(pathstr, 'w') as f:
             json.dump(val, f)
     else:
-        if verbose: print 'using cached', api_type
+        if verbose: print 'using cached', api_type.name
         with open(pathstr) as f:
             val = json.load(f)
 
