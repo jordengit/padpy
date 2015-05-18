@@ -127,8 +127,9 @@ class Image(object):
         return "<%s>" % str(self)
 
 class XpCurve(object):
-    def __init__(self, id):
+    def __init__(self, id, owner):
         self.id = id
+        self.owner = owner
 
     @property
     def long_name(self):
@@ -145,7 +146,8 @@ class XpCurve(object):
         )
 
     def calc_for_level(self, level):
-        return  round(self.id * (((level-1.0)/98.0)**2.5))
+        level = min(level, self.owner.max_level)
+        return round(self.id * (((level-1.0)/98.0)**2.5))
 
 class FeedXp(object):
     def __init__(self, base_xp):
@@ -252,7 +254,7 @@ class Monster(object):
         self.feed_xp = FeedXp(kwargs['feed_xp'])
         self.feed_xp_raw = int(kwargs['feed_xp'])
 
-        self.xp_curve = XpCurve(kwargs['xp_curve'])
+        self.xp_curve = XpCurve(kwargs['xp_curve'], self)
         self.xp_curve_raw = int(kwargs['xp_curve'])
 
         self.active_skill = ActiveSkill(0, 'UNSET ACTIVE SKILL', 0, 'UNSET ACTIVE SKILL NAME')

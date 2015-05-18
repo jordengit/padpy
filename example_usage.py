@@ -28,7 +28,14 @@ def calc_xp(monster_id, level, verbose=False):
     padpy = Pad(verbose=verbose)
 
     monster = padpy.get_monster(monster_id)
-    print "From level 1 to level %s" % level
+    calc_level = min(level, monster.max_level)
+    if calc_level != level:
+        print "{monster} is level capped at {max}!".format(
+                monster=monster,
+                max=monster.max_level,
+        )
+
+    print "From level 1 to level %s" % calc_level
     print "%s XP is required" % monster.xp_curve.calc_for_level(level)
 
 parser = argh.ArghParser()
