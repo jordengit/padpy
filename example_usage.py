@@ -1,15 +1,26 @@
 import sys
+import argh
 
 from pad import Pad
 from filters import MonsterFilter
 
-if __name__ == "__main__":
-    padpy = Pad(verbose=True)
+@argh.arg("monster_id", type=int, help="ID of the monster")
+def get_monster(monster_id, verbose=False):
+    padpy = Pad(verbose=verbose)
 
-    monster_id = int(sys.argv[1])
-    m1 = padpy.get_monster(monster_id)
+    monster = padpy.get_monster(monster_id)
+    padpy.pretty_print(monster)
+
+def get_all_monsters(verbose=False):
+    padpy = Pad(verbose=verbose)
 
     monsters = padpy.get_all_monsters()
     for monster in monsters:
         padpy.pretty_print(monster)
         print
+
+parser = argh.ArghParser()
+parser.add_commands([get_monster, get_all_monsters])
+
+if __name__ == "__main__":
+    parser.dispatch()
