@@ -2,13 +2,11 @@
 
 API being wrapped: https://www.padherder.com/api/
 
-I've only just started to use the API, but it looks pretty complete.  The short
-term goal is to be able to fuse efficiently, without having to do too much
-legwork.
+Python wrapper for the PADherder API. Under active development, anything can change
 
 ## Installation
 
-    pip install requests urllib3 enum34
+    pip install requests urllib3 enum34 argh
     git clone git@github.com:tankorsmash/padpy.git
     
 *(Optional)* Running `pad.py` the first time will download the data and cache it for next time. This will happen no matter when you use it, so it's optional.
@@ -17,6 +15,8 @@ legwork.
 If you get the warning about OpenSSL import failing, you might need some [additional dependencies](https://stackoverflow.com/questions/18578439/using-requests-with-tls-doesnt-give-sni-support/18579484#18579484)
     
 ## Usage
+
+See `example_usage.py` for a example of how you could use padpy.
     
     >>> pad = Pad(verbose=False) #verbosity tells you whether or not the data is retrieved from API or cache
     >>> monsters = pad.get_all_monsters() #get fill list of monsters
@@ -38,7 +38,9 @@ If you get the warning about OpenSSL import failing, you might need some [additi
      >>> print ice_ogre.__dict__ #for much more data
 
 
-It gets the json from the API and saves it to your drive, saving some time. This is under active development.
+It gets the json from the API and saves it to your drive, saving some time.
+
+This is under active development.
 
 ## Features
 
