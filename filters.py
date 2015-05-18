@@ -24,3 +24,6 @@ class MonsterFilter(object):
     def by_active_skill(self, name):
         return filter(lambda m: m.active_skill.name == name, self.objects)
 
+    def by_leader_skill(self, name):
+        return filter(lambda m: m.leader_skill.name == name, self.objects)
+
