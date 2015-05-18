@@ -72,3 +72,7 @@ FoodIds = {
     "monsters" : FoodTypes.Monster,
 }
 
+# FilterTypes = Enum("FilterTypes", "Hp Atk Rcv")
+# class FilterTypes(Enum):
+#     HP = 
+

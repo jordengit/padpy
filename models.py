@@ -164,11 +164,11 @@ class ActiveSkillManager(BaseManager):
 
     def build_obj(self, **skill):
         return  self.model(
-                    skill['min_cooldown'],
-                    skill['effect'],
-                    skill['max_cooldown'],
-                    skill['name'],
-                )
+            skill['min_cooldown'],
+            skill['effect'],
+            skill['max_cooldown'],
+            skill['name'],
+        )
 
 class ActiveSkill(object):
     def __init__(self, min_cooldown, effect, max_cooldown, name):
@@ -244,11 +244,12 @@ class FeedXp(object):
 
 class Element(object):
     def __init__(self, id):
-        self.id = id
+        self.id = int(id) if id is not None else None
+        self.type = ElementIds[self.id]
 
     @property
     def long_name(self):
-        return ElementIds[self.id].name
+        return self.type.name
 
     def __str__(self):
         return "Element {}".format(
@@ -263,10 +264,11 @@ class Element(object):
 class Type(object):
     def __init__(self, id):
         self.id = id
+        self.type = TypeIds[id]
 
     @property
     def long_name(self):
-        return TypeIds[self.id].name
+        return self.type.name
 
     def __str__(self):
         return "Type {}".format(
