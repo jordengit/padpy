@@ -81,7 +81,10 @@ FoodIds = {
     "monsters" : FoodTypes.Monster,
 }
 
-# FilterTypes = Enum("FilterTypes", "Hp Atk Rcv")
-# class FilterTypes(Enum):
-#     HP = 
+AttributeTypes = Enum("AttributeTypes", "Hp Atk Rcv")
 
+AttributePlusMap = {
+    AttributeTypes.Hp : 10,
+    AttributeTypes.Atk : 5,
+    AttributeTypes.Rcv : 3,
+}

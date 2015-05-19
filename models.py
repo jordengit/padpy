@@ -208,7 +208,8 @@ class Type(object):
 
 
 class Attribute(object):
-    def __init__(self, max, min, scale, owner):
+    def __init__(self, type, max, min, scale, owner):
+        self.type = type
         self.max = int(max)
         self.min = int(min)
         self.scale = int(scale)
@@ -224,10 +225,16 @@ class Attribute(object):
     def __repr__(self):
         return "<Attribute %s>" % str(self)
 
+    def calc_for_level_plus(self, level, plus):
+        return self.calc_for_level(level) + self.calc_plus(plus)
+
     def calc_for_level(self, level):
         lvl_calc = (level-1.0)/(self.owner.max_level-1.0)
         result =  self.min + (self.max - self.min) * lvl_calc ** self.scale
         return round(result)
+
+    def calc_plus(self, val):
+        return AttributePlusMap[self.type] * val
 
 class Monster(object):
     def __init__(self, **kwargs):
@@ -281,18 +288,21 @@ class Monster(object):
 
 
         self.hp = Attribute(
+            AttributeTypes.Hp,
             kwargs['hp_max'],
             kwargs['hp_min'],
             kwargs['hp_scale'],
             self,
         )
         self.atk = Attribute(
+            AttributeTypes.Atk,
             kwargs['atk_max'],
             kwargs['atk_min'],
             kwargs['atk_scale'],
             self,
         )
         self.rcv = Attribute(
+            AttributeTypes.Rcv,
             kwargs['rcv_max'],
             kwargs['rcv_min'],
             kwargs['rcv_scale'],
@@ -317,6 +327,17 @@ class Monster(object):
         )
 
         self.jp_only = kwargs['jp_only']
+
+    def get_attribute(self, attr_type):
+        attr_map = {
+            AttributeTypes.Hp : 'hp',
+            AttributeTypes.Atk : 'atk',
+            AttributeTypes.Rcv : 'rcv',
+        }
+        if attr_type not in attr_map:
+            print "attribute type invalid"
+
+        return getattr(self, attr_map[attr_type])
 
 class EvolutionComponent(object):
     def __init__(self, monster_id, count, owner):
