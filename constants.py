@@ -88,3 +88,9 @@ AttributePlusMap = {
     AttributeTypes.Atk : 5,
     AttributeTypes.Rcv : 3,
 }
+
+EventCountryTypes = Enum("EventCountryTypes", "Jp Us")
+EventCountryIds = {
+    1 : EventCountryTypes.Jp,
+    2 : EventCountryTypes.Us,
+}

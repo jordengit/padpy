@@ -64,12 +64,28 @@ def calc_attribute(monster_id, level, attribute, plus=0, verbose=False):
     print "Attribute %s at level %s plus %s" % (attr_obj, calc_level, plus)
     print "%s is the stat" % (result)
 
+def get_events(verbose=False):
+    """ 
+    Gets all the events returned by the PADherder API. 
+    Generally a few days worth.
+
+    Note that these are cached, you'll need to delete data/events.json manually 
+    if you want an updated list of events.
+    """
+    padpy = Pad(verbose=verbose)
+
+    for evt in padpy.get_all_events():
+        print evt
+
+
+
 parser = argh.ArghParser()
 parser.add_commands([
     get_monster,
     get_all_monsters,
     calc_xp,
     calc_attribute,
+    get_events,
 ])
 
 if __name__ == "__main__":

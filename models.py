@@ -1,3 +1,5 @@
+import dateutil.parser
+
 from constants import *
 from dataset import get_all_raw_data
 
@@ -557,3 +559,26 @@ class FoodManager(BaseManager):
     @property
     def model(self):
         return Food
+
+class Event(object):
+    def __init__(self, title, starts_at, group_name, country):
+        self.title = title
+        self.starts_at = dateutil.parser.parse(starts_at)
+        self.group_name = group_name
+        self.country = EventCountryIds[country]
+
+    def __str__(self):
+        return "{group}:{title} at {time} ({country})".format(
+            group=self.group_name,
+            title=self.title,
+            time=self.starts_at.ctime(),
+            country=self.country.name,
+        )
+
+    def __repr__(self):
+        return "<Event {}>".format(str(self))
+
+class EventManager(BaseManager):
+    @property
+    def model(self):
+        return Event

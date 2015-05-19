@@ -5,7 +5,7 @@ import requests
 from dataset import get_all_raw_data
 from constants import ElementTypes, TypeTypes
 from models import MonsterManager, EvolutionManager, ActiveSkillManager, \
-        AwakeningManager, LeaderSkillManager, FoodManager
+        AwakeningManager, LeaderSkillManager, FoodManager, EventManager
 
 class Pad(object):
     """
@@ -37,6 +37,8 @@ class Pad(object):
         self.leader_skills = LeaderSkillManager(data['leader_skills'])
         self.food = FoodManager(data['food'])
 
+        self.events = EventManager(data['events'])
+
 
     def populate_monster(self, monster):
         """ replaces placeholder data with real data """
@@ -60,6 +62,9 @@ class Pad(object):
 
     def sort(self, monsters):
         return sorted(monsters, key=lambda monster: monster.id)
+
+    def get_all_events(self):
+        return self.events.objects
 
     def get_evolution_tree(self, monster):
         """ 
