@@ -52,30 +52,50 @@ class UserMonsterManager(BaseUserManager):
 class UserMonster(object):
     def __init__(self, **kwargs):
         self.pad = kwargs['pad']
+        self.load_data(**kwargs)
+
+    def __str__(self):
+        plus_val = self.plus_atk_raw+self.plus_hp_raw+self.plus_rcv_raw
+        plus = "+{}".format(plus_val) if plus_val else ""
+
+        return "{monster}{plus} Lv:{level}".format(
+            monster=self.monster.name,
+            plus=plus,
+            level=self.current_level,
+        )
+
+    def __repr__(self):
+        return "<uMonster: %s>" % str(self)
+
+    def load_data(self, **kwargs):
 
         self.id = kwargs['id']
         self.monster = self.pad.get_monster(kwargs['monster'])
         self.note = kwargs['note']
         self.priority = kwargs['priority']
 
-        self.current_xp = kwargs['current_xp']
+        self.current_xp = int(kwargs['current_xp'])
+        self.current_level = self.monster.xp_curve.calc_for_xp(self.current_xp)
         self.current_skill = kwargs['current_skill']
         self.current_awakening = kwargs['current_awakening']
 
-        self.plus_atk = kwargs['plus_atk']
-        self.plus_hp = kwargs['plus_hp']
-        self.plus_rcv = kwargs['plus_rcv']
+        self.plus_hp_raw = kwargs['plus_hp']
+        self.plus_hp = self.monster.hp.calc_for_level_plus(
+            self.current_level,
+            self.plus_hp_raw
+        )
+        self.plus_atk_raw = kwargs['plus_atk']
+        self.plus_atk = self.monster.atk.calc_for_level_plus(
+            self.current_level,
+            self.plus_atk_raw
+        )
+        self.plus_rcv_raw = kwargs['plus_rcv']
+        self.plus_rcv = self.monster.rcv.calc_for_level_plus(
+            self.current_level,
+            self.plus_rcv_raw
+        )
 
         self.target_evolution = kwargs['target_evolution']
         self.target_level = kwargs['target_level']
 
         self.url = kwargs['url']
-
-    def __str__(self):
-        return "{monster} XP:{level}".format(
-            monster=self.monster,
-            level=self.current_xp,
-        )
-
-    def __repr__(self):
-        return "<uMonster: %s>" % str(self)

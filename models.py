@@ -1,3 +1,4 @@
+import math
 import dateutil.parser
 
 from constants import *
@@ -154,7 +155,17 @@ class XpCurve(object):
 
     def calc_for_level(self, level):
         level = min(level, self.owner.max_level)
-        return round(self.id * (((level-1.0)/98.0)**2.5))
+        max_xp = self.id
+        return round(max_xp * (((level-1.0)/98.0)**2.5))
+
+    def calc_for_xp(self, xp):
+        xp = float(xp)
+        max_xp = float(self.id)
+
+        uncapped_level = (98.0 * (xp/max_xp) ** (1.0/2.5)) + 1.0
+        level = min(math.trunc(uncapped_level), self.owner.max_level)
+        return level
+
 
 class FeedXp(object):
     def __init__(self, base_xp):
