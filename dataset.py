@@ -43,6 +43,14 @@ UserApiTypeMap = {
     UserApiTypes.Monsters : "monster/{}",
     UserApiTypes.Teams : "team/{}",
 }
+UserApiDataMap = {
+    UserApiTypes.Profile : "profile",
+    UserApiTypes.Food : "food",
+    UserApiTypes.Materials : "materials",
+    UserApiTypes.Monsters : "monsters",
+    UserApiTypes.Teams : "teams",
+}
+
 
 def assert_valid_api_path(path):
     """
@@ -127,14 +135,11 @@ def get_all_raw_data(verbose=False):
         monsters = get(ApiTypes.Monsters),
     )
 
-def get_raw_user_profile_data(user_id, verbose=False):
-    get = partial(get_from_api, verbose=verbose)
-    return dict(
-            profile = get(UserApiTypes.Profile, arg=user_id),
-    )
 
-def get_raw_user_data(username, verbose=False):
+def get_raw_user_data(username, user_api_type=None, verbose=False):
     get = partial(get_from_api, verbose=verbose)
-    return dict(
-            get(UserApiTypes.User, arg=username),
-    )
+    data = dict(get(UserApiTypes.User, arg=username))
+    if not user_api_type:
+        return data
+    else:
+        return data[UserApiDataMap[user_api_type]]

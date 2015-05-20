@@ -2,8 +2,7 @@ import sys
 import json
 import requests
 
-from dataset import get_all_raw_data, get_raw_user_profile_data, \
-        get_raw_user_data
+from dataset import get_all_raw_data, get_raw_user_data, UserApiTypes
 from constants import ElementTypes, TypeTypes
 from models import MonsterManager, EvolutionManager, ActiveSkillManager, \
         AwakeningManager, LeaderSkillManager, FoodManager, EventManager
@@ -41,11 +40,17 @@ class Pad(object):
 
             self.events = EventManager(data['events'])
 
-    def get_user_profile(self, user_id, verbose=False):
-        return get_raw_user_profile_data(user_id, verbose=verbose)
+    def get_user_profile(self, username, verbose=False):
+        return get_raw_user_data(username, UserApiTypes.Profile, verbose=verbose)
 
     def get_user_data(self, username, verbose=False):
         return get_raw_user_data(username, verbose=verbose)
+
+    def get_user_teams(self, username, verbose=False):
+        return get_raw_user_data(username, UserApiTypes.Teams, verbose=verbose)
+
+    def get_user_monsters(self, username, verbose=False):
+        return get_raw_user_data(username, UserApiTypes.Monsters, verbose=verbose)
 
     def populate_monster(self, monster):
         """ replaces placeholder data with real data """

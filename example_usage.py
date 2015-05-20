@@ -79,15 +79,26 @@ def get_events(verbose=False):
     for evt in padpy.get_all_events():
         print evt
 
-@argh.arg("user_id", type=int, help="User ID of the profile")
-def get_user_profile(user_id, verbose=False):
+@argh.arg("username", type=str, help="User ID of the profile")
+def get_user_profile(username, verbose=False):
     padpy = Pad(verbose=verbose)
-    pp(padpy.get_user_profile(user_id))
+    pp(padpy.get_user_profile(username))
 
-@argh.arg("user_name", type=str, help="Username of the profile")
-def get_user_data(user_name, verbose=False):
+@argh.arg("username", type=str, help="Username of the profile")
+def get_user_data(username, verbose=False):
     padpy = Pad(use_monster_api=False, verbose=verbose)
-    pp(padpy.get_user_data(user_name))
+    pp(padpy.get_user_data(username))
+
+@argh.arg("username", type=str, help="Username of the profile")
+def get_user_teams(username, verbose=False):
+    padpy = Pad(use_monster_api=False, verbose=verbose)
+    pp(padpy.get_user_teams(username))
+
+
+@argh.arg("username", type=str, help="Username of the profile")
+def get_user_monsters(username, verbose=False):
+    padpy = Pad(use_monster_api=False, verbose=verbose)
+    pp(padpy.get_user_monsters(username))
 
 
 parser = argh.ArghParser()
@@ -99,6 +110,8 @@ parser.add_commands([
     get_events,
     get_user_profile,
     get_user_data,
+    get_user_teams,
+    get_user_monsters,
 ])
 
 if __name__ == "__main__":
