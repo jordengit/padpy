@@ -1,12 +1,21 @@
 from models import BaseManager
 
-class UserTeamManager(BaseManager):
+class BaseUserManager(BaseManager):
+    pass_pad = True
+
+    def __init__(self, pad, data):
+        self.pad = pad
+        super(BaseUserManager, self).__init__(data)
+
+class UserTeamManager(BaseUserManager):
     @property
     def model(self):
         return UserTeam
 
 class UserTeam(object):
     def __init__(self, **kwargs):
+        self.pad = kwargs['pad']
+
         self.id = kwargs['id']
         self.name = kwargs['name']
         self.favourite = kwargs['favourite']
@@ -35,15 +44,17 @@ class UserTeam(object):
     def __repr__(self):
         return "<uTeam: %s>" % str(self)
 
-class UserMonsterManager(BaseManager):
+class UserMonsterManager(BaseUserManager):
     @property
     def model(self):
         return UserMonster
 
 class UserMonster(object):
     def __init__(self, **kwargs):
+        self.pad = kwargs['pad']
+
         self.id = kwargs['id']
-        self.monster = kwargs['monster']
+        self.monster = self.pad.get_monster(kwargs['monster'])
         self.note = kwargs['note']
         self.priority = kwargs['priority']
 

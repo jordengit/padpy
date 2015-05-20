@@ -54,7 +54,7 @@ class Pad(object):
 
     def get_user_monsters(self, username, verbose=False):
         monster_data = get_raw_user_data(username, UserApiTypes.Monsters, verbose=verbose)
-        return UserMonsterManager(monster_data).objects
+        return UserMonsterManager(self, monster_data).objects
 
     def populate_monster(self, monster):
         """ replaces placeholder data with real data """

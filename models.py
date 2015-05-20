@@ -18,6 +18,8 @@ class BaseManager(object):
     nested_list = False #special load_data handling case
     nested_dict = False #special load_data handling case
 
+    pass_pad = False #pass the pad instance to model
+
     def __init__(self, data):
         self.load_data(data)
 
@@ -28,6 +30,9 @@ class BaseManager(object):
 
     def build_obj(self, **kwargs):
         """ create the Model instance """
+        if self.pass_pad:
+            kwargs['pad'] = getattr(self, 'pad', None)
+
         return self.model(**kwargs)
 
     def load_data(self, data):
