@@ -55,6 +55,13 @@ This is under active development.
   * ...by id
   * ...in a given monsters evolution tree
 
+* Getting a PADherders user data, (but barely handling it) for
+  * Monsters
+  * Teams
+  * Food
+  * Materials
+  * User profile
+
 * Filter monsters by 
   * HP, ATK, RCV
   * Team Cost
