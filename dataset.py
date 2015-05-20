@@ -135,7 +135,6 @@ def get_all_raw_data(verbose=False):
         monsters = get(ApiTypes.Monsters),
     )
 
-
 def get_raw_user_data(username, user_api_type=None, verbose=False):
     get = partial(get_from_api, verbose=verbose)
     data = dict(get(UserApiTypes.User, arg=username))

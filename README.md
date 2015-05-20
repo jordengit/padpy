@@ -72,6 +72,13 @@ This is under active development.
   * Events
   * Food
 
+* Handle PADherder's custom user stuff a little better
+  * Profile
+  * Teams
+  * Monsters
+  * Food
+  * Material
+
 * Query on monsters
   * filter by crazier stuff
 
