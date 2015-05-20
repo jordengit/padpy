@@ -1,6 +1,8 @@
 import sys
 import argh
 
+from pprint import pprint as pp
+
 from pad import Pad
 from filters import MonsterFilter
 from constants import AttributeTypes
@@ -77,6 +79,15 @@ def get_events(verbose=False):
     for evt in padpy.get_all_events():
         print evt
 
+@argh.arg("user_id", type=int, help="User ID of the profile")
+def get_user_profile(user_id, verbose=False):
+    padpy = Pad(verbose=verbose)
+    pp(padpy.get_user_profile(user_id))
+
+@argh.arg("user_name", type=str, help="Username of the profile")
+def get_user_data(user_name, verbose=False):
+    padpy = Pad(use_monster_api=False, verbose=verbose)
+    pp(padpy.get_user_data(user_name))
 
 
 parser = argh.ArghParser()
@@ -86,6 +97,8 @@ parser.add_commands([
     calc_xp,
     calc_attribute,
     get_events,
+    get_user_profile,
+    get_user_data,
 ])
 
 if __name__ == "__main__":

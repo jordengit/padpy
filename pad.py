@@ -2,7 +2,8 @@ import sys
 import json
 import requests
 
-from dataset import get_all_raw_data
+from dataset import get_all_raw_data, get_raw_user_profile_data, \
+        get_raw_user_data
 from constants import ElementTypes, TypeTypes
 from models import MonsterManager, EvolutionManager, ActiveSkillManager, \
         AwakeningManager, LeaderSkillManager, FoodManager, EventManager
@@ -28,17 +29,23 @@ class Pad(object):
      <Monster #313 Wood Ice Ogre>]
     """
 
-    def __init__(self, verbose=False):
-        data = get_all_raw_data(verbose=verbose)
-        self.monsters = MonsterManager(data['monsters'])
-        self.evolutions = EvolutionManager(data['evolutions'])
-        self.active_skills = ActiveSkillManager(data['active_skills'])
-        self.awakenings = AwakeningManager(data['awakenings'])
-        self.leader_skills = LeaderSkillManager(data['leader_skills'])
-        self.food = FoodManager(data['food'])
+    def __init__(self, use_monster_api=True, verbose=False):
+        if use_monster_api:
+            data = get_all_raw_data(verbose=verbose)
+            self.monsters = MonsterManager(data['monsters'])
+            self.evolutions = EvolutionManager(data['evolutions'])
+            self.active_skills = ActiveSkillManager(data['active_skills'])
+            self.awakenings = AwakeningManager(data['awakenings'])
+            self.leader_skills = LeaderSkillManager(data['leader_skills'])
+            self.food = FoodManager(data['food'])
 
-        self.events = EventManager(data['events'])
+            self.events = EventManager(data['events'])
 
+    def get_user_profile(self, user_id, verbose=False):
+        return get_raw_user_profile_data(user_id, verbose=verbose)
+
+    def get_user_data(self, username, verbose=False):
+        return get_raw_user_data(username, verbose=verbose)
 
     def populate_monster(self, monster):
         """ replaces placeholder data with real data """

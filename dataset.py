@@ -2,6 +2,8 @@ import json
 import os, sys
 import requests
 
+from functools import partial
+
 from enum import Enum
 """
 Uses the api from https://www.padherder.com/api/#data
@@ -16,6 +18,7 @@ except ImportError as e:
     print 'check out https://stackoverflow.com/questions/18578439/using-requests-with-tls-doesnt-give-sni-support/18579484#18579484'
 
 BASE_API = "https://www.padherder.com/api"
+BASE_USER_API = "https://www.padherder.com/user-api"
 DATA_PATH = "data"
 
 
@@ -31,6 +34,16 @@ ApiTypeMap = {
     ApiTypes.Monsters : "monsters",
 }
 
+UserApiTypes = Enum("ApiTypes", "User Profile Food Materials Monsters Teams")
+UserApiTypeMap = {
+    UserApiTypes.User : "user/{}",
+    UserApiTypes.Profile : "profile/{}",
+    UserApiTypes.Food : "food/{}",
+    UserApiTypes.Materials : "material/{}",
+    UserApiTypes.Monsters : "monster/{}",
+    UserApiTypes.Teams : "team/{}",
+}
+
 def assert_valid_api_path(path):
     """
     makes a HEAD request to the path, makes sure it 200s
@@ -42,10 +55,19 @@ def assert_valid_api_path(path):
         print 'ERROR', path, 'was not valid'
         raise
 
-def build_api_path(api_type):
+def build_api_path(api_type, arg=None):
+    if api_type in ApiTypes:
+        base_path = BASE_API
+        ext_path = ApiTypeMap[api_type]
+    elif api_type in UserApiTypes:
+        base_path = BASE_USER_API
+        ext_path = UserApiTypeMap[api_type]
+    else:
+        print "Unrecognized ApiType"
+
     return "{base}/{path}/".format(
-        base=BASE_API,
-        path=ApiTypeMap[api_type]
+        base=base_path,
+        path=ext_path.format(arg) if arg else ext_path,
     )
 
 def create_data_path():
@@ -60,8 +82,8 @@ def create_data_path():
             print
             return True
 
-def get_from_api(api_type):
-    api_path = build_api_path(api_type)
+def get_from_api(api_type, arg=None, verbose=False):
+    api_path = build_api_path(api_type, arg)
     assert_valid_api_path(api_path)
 
     resp = requests.get(api_path)
@@ -72,7 +94,7 @@ def get_from_api(api_type):
 def get_from_cache(api_type, verbose=False):
     pathstr = "{base}/{path}.json".format(
         base=DATA_PATH,
-        path=ApiTypeMap[api_type]
+        path=ApiTypeMap[api_type] if api_type in ApiTypeMap else UserApiTypeMap[api_type]
     )
 
     if not os.path.exists(pathstr): 
@@ -82,7 +104,7 @@ def get_from_cache(api_type, verbose=False):
                 print "Warning", api_type.name, "is not cached for next time"
             print 'fetching', api_type
 
-        val = get_from_api(api_type)
+        val = get_from_api(api_type, arg=arg)
         with open(pathstr, 'w') as f:
             json.dump(val, f)
     else:
@@ -93,13 +115,26 @@ def get_from_cache(api_type, verbose=False):
     return val
 
 def get_all_raw_data(verbose=False):
+    get = partial(get_from_cache, verbose=verbose)
     return dict(
-        active_skills = get_from_cache(ApiTypes.ActiveSkills, verbose=verbose),
-        awakenings = get_from_cache(ApiTypes.Awakenings, verbose=verbose),
-        events = get_from_cache(ApiTypes.Events, verbose=verbose),
-        evolutions = get_from_cache(ApiTypes.Evolutions, verbose=verbose),
-        food = get_from_cache(ApiTypes.Food, verbose=verbose),
-        leader_skills = get_from_cache(ApiTypes.LeaderSkills, verbose=verbose),
-        materials = get_from_cache(ApiTypes.Materials, verbose=verbose),
-        monsters = get_from_cache(ApiTypes.Monsters, verbose=verbose),
+        active_skills = get(ApiTypes.ActiveSkills),
+        awakenings = get(ApiTypes.Awakenings),
+        events = get(ApiTypes.Events),
+        evolutions = get(ApiTypes.Evolutions),
+        food = get(ApiTypes.Food),
+        leader_skills = get(ApiTypes.LeaderSkills),
+        materials = get(ApiTypes.Materials),
+        monsters = get(ApiTypes.Monsters),
+    )
+
+def get_raw_user_profile_data(user_id, verbose=False):
+    get = partial(get_from_api, verbose=verbose)
+    return dict(
+            profile = get(UserApiTypes.Profile, arg=user_id),
+    )
+
+def get_raw_user_data(username, verbose=False):
+    get = partial(get_from_api, verbose=verbose)
+    return dict(
+            get(UserApiTypes.User, arg=username),
     )
