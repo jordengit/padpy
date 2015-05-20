@@ -94,7 +94,6 @@ def get_user_teams(username, verbose=False):
     padpy = Pad(use_monster_api=False, verbose=verbose)
     pp(padpy.get_user_teams(username))
 
-
 @argh.arg("username", type=str, help="Username of the profile")
 def get_user_monsters(username, verbose=False):
     padpy = Pad(use_monster_api=False, verbose=verbose)
