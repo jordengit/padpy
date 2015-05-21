@@ -50,7 +50,7 @@ class Pad(object):
 
     def get_user_teams(self, username, verbose=False):
         team_data = get_raw_user_data(username, UserApiTypes.Teams, verbose=verbose)
-        return UserTeamManager(team_data).objects
+        return UserTeamManager(self, team_data).objects
 
     def get_user_monsters(self, username, verbose=False):
         monster_data = get_raw_user_data(username, UserApiTypes.Monsters, verbose=verbose)
