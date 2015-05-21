@@ -112,7 +112,7 @@ def get_from_cache(api_type, verbose=False):
                 print "Warning", api_type.name, "is not cached for next time"
             print 'fetching', api_type
 
-        val = get_from_api(api_type, arg=arg)
+        val = get_from_api(api_type)
         with open(pathstr, 'w') as f:
             json.dump(val, f)
     else:
