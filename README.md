@@ -40,7 +40,7 @@ See `example_usage.py` for a example of how you could use padpy.
 
 It gets the json from the API and saves it to your drive, saving some time.
 
-This is under active development.
+This is no longer under active development.
 
 ## Features
 
