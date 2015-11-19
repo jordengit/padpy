@@ -13,7 +13,8 @@ Python wrapper for the PADherder API. Under active development, anything can cha
     python pad.py 
     
 If you get the warning about OpenSSL import failing, you might need some [additional dependencies](https://stackoverflow.com/questions/18578439/using-requests-with-tls-doesnt-give-sni-support/18579484#18579484)
-    
+ 
+To fix this run `setup.sh`, make sure the user have the necessary permission.
 ## Usage
 
 See `example_usage.py` for a example of how you could use padpy.

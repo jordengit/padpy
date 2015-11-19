@@ -11,7 +11,7 @@ ElementIds = {
 }
 
 
-TypeTypes = Enum("TypeTypes", "EvoMaterial Balanced Physical Healer Dragon God Attacker Devil AwokenSkillMaterial Protected EnhanceMaterial NoType")
+TypeTypes = Enum("TypeTypes", "EvoMaterial Balanced Physical Healer Dragon God Attacker Devil Machine AwokenSkillMaterial Protected EnhanceMaterial NoType")
 TypeIds = { 
     0 : TypeTypes.EvoMaterial,
     1 : TypeTypes.Balanced,
@@ -21,6 +21,7 @@ TypeIds = {
     5 : TypeTypes.God,
     6 : TypeTypes.Attacker,
     7 : TypeTypes.Devil,
+    8 : TypeTypes.Machine,
     12 : TypeTypes.AwokenSkillMaterial,
     13 : TypeTypes.Protected,
     14 : TypeTypes.EnhanceMaterial,

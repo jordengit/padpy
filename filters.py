@@ -8,12 +8,15 @@ class MonsterFilter(object):
 
     def by_element2(self, element):
         return filter(lambda m: m.element2.type == element, self.objects)
-
+    
     def by_type(self, type):
         return filter(lambda m: m.type.type == type, self.objects)
 
     def by_type2(self, type):
         return filter(lambda m: m.type2.type == type, self.objects)
+    
+    def by_type3(self, type):
+	return filter(lambda m: m.typ3.type == type, self.objects)
 
     def by_rarity(self, rarity):
         return filter(lambda m: m.rarity == int(rarity), self.objects)
