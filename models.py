@@ -303,7 +303,8 @@ class Monster(object):
         self.type_id = int(kwargs['type']) if kwargs['type'] else 0
         self.type2 = Type(kwargs['type2'])
         self.type2_id = int(kwargs['type2']) if kwargs['type2'] else 0
-
+	self.type3 = Type(kwargs['type3']
+	self.type3_id = int(kwargs['type3']) if kwargs['type3'] else 0
 
         self.hp = Attribute(
             AttributeTypes.Hp,
